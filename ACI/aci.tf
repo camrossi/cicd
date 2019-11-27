@@ -34,7 +34,7 @@ resource "aci_application_profile" "app1" {
 
 data "aci_vmm_domain" "vds" {
   provider_profile_dn = "${var.provider_profile_dn}"
-  name                = "ACI-DVS"
+  name                = "ACI"
 }
 
 resource "aci_application_epg" "epg1" {
