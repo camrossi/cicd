@@ -12,7 +12,7 @@ data "vsphere_datacenter" "dc" {
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "ESX1i-DS"
+  name          = "BM01"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
@@ -32,12 +32,12 @@ data "vsphere_network" "pg2" {
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "Cluster1"
+  name          = "Cluster"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "UbuntuServer16"
+  name          = "Ubuntu-18-04"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 

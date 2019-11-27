@@ -5,7 +5,7 @@ variable "vsphere_password" {
   default = "123Cisco123!"
 }
 variable "vsphere_server" {
-  default = "vc1.cam.ciscolabs.com"
+  default = "vc2.cam.ciscolabs.com"
 }
 variable "ssh_user" {
   default = "cisco"
