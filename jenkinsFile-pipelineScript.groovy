@@ -34,7 +34,7 @@ pipeline {
      steps {
        dir('dev'){
          ansiColor('xterm'){
-           git branch: 'master', url: 'http://10.0.76.250/cisco/onprem.git'
+           git branch: 'master', url: 'http://10.67.185.80/cisco/camrossi/cicd.git'
          }
        }
      }
