@@ -67,30 +67,29 @@ resource "aci_rest" "rest_pysdom" {
   path       = "api/node/mo/${aci_tenant.demo.id}/${aci_application_profile.app1.id}/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
   class_name = "fvRsDomAtt"
   content = {
-          "annotation": "",
-          "bindingType": "none",
-          "classPref": "encap",
-          "customEpgName": "",
-          "delimiter": "",
-          "dn": "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]",
-          "encap": "unknown",
-          "encapMode": "auto",
-          "epgCos": "Cos0",
-          "epgCosPref": "disabled",
-          "instrImedcy": "lazy",
-          "lagPolicyName": "",
-          "netflowDir": "both",
-          "netflowPref": "disabled",
-          "numPorts": "0",
-          "portAllocation": "none",
-          "primaryEncap": "unknown",
-          "primaryEncapInner": "unknown",
-          "resImedcy": "immediate",
-          "secondaryEncapInner": "unknown",
-          "switchingMode": "native",
-          "tDn": "uni/phys-Fab2",
-          "untagged": "no"
-
+          "annotation"= "",
+          "bindingType"= "none",
+          "classPref"= "encap",
+          "customEpgName"= "",
+          "delimiter"= "",
+          "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]",
+          "encap"= "unknown",
+          "encapMode"= "auto",
+          "epgCos"= "Cos0",
+          "epgCosPref"= "disabled",
+          "instrImedcy"= "lazy",
+          "lagPolicyName"= "",
+          "netflowDir"= "both",
+          "netflowPref"= "disabled",
+          "numPorts"= "0",
+          "portAllocation"= "none",
+          "primaryEncap"= "unknown",
+          "primaryEncapInner"= "unknown",
+          "resImedcy"= "immediate",
+          "secondaryEncapInner"= "unknown",
+          "switchingMode"= "native",
+          "tDn"= "uni/phys-Fab2",
+          "untagged"= "no"
   }
 
 }
