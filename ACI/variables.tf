@@ -2,13 +2,13 @@ variable "tenantName" {
   default = "terraformDemo"
 }
 variable "aciUser" {
-  default = "ansible"
+  default = "automation"
 }
 variable "aciPrivateKey" { 
   default = "ansible.key"
 }
 variable "aciCertName" {
-  default = "ansible"
+  default = "ansible.crt"
 }
 variable "aciUrl" {
   default = "https://fab1-apic1.cam.ciscolabs.com"
