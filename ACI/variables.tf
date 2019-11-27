@@ -19,5 +19,5 @@ variable "bd_subnet" {
   default = "1.1.1.1/24"
 }
 variable "provider_profile_dn" {
-  default = "uni/vmmp-VMware"
+  default = "uni/vmmp-ACI"
 }
