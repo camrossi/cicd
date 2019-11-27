@@ -5,7 +5,7 @@ app = Flask(__name__, static_url_path='/static')
 
 @app.route('/hello')
 def say_hello():
-    return '<h1>You have reached the hello page again</h1>'
+    return '<h1>You have reached the hello page</h1>'
 
 @app.route('/')
 def default_greet():
