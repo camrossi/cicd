@@ -64,7 +64,7 @@ resource "aci_application_epg" "admin" {
 }
 
 resource "aci_rest" "rest_pysdom" {
-  path       = "api/node/mo/${aci_tenant.demo.id}/${aci_application_profile.app1.id}/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
+  path       = "api/node/mo/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
   class_name = "fvRsDomAtt"
   content = {
           "annotation"= "",
