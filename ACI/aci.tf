@@ -37,10 +37,6 @@ data "aci_vmm_domain" "vds" {
   name                = "ACI"
 }
 
-data "aci_phys_domain" "Fab2" {
-  provider_profile_dn = "uni/phys-"
-  name                = "Fab2"
-}
 
 resource "aci_application_epg" "epg1" {
   application_profile_dn = "${aci_application_profile.app1.id}"
@@ -66,6 +62,39 @@ resource "aci_application_epg" "admin" {
   relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}","${data.aci_phys_domain.Fab2.id}"]
   relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
 }
+
+resource "aci_rest" "rest_pysdom" {
+  path       = "api/node/mo/${aci_tenant.demo.id}/${aci_application_profile.app1.id}/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
+  class_name = "fvRsDomAtt"
+  content = {
+          "annotation": "",
+          "bindingType": "none",
+          "classPref": "encap",
+          "customEpgName": "",
+          "delimiter": "",
+          "dn": "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]",
+          "encap": "unknown",
+          "encapMode": "auto",
+          "epgCos": "Cos0",
+          "epgCosPref": "disabled",
+          "instrImedcy": "lazy",
+          "lagPolicyName": "",
+          "netflowDir": "both",
+          "netflowPref": "disabled",
+          "numPorts": "0",
+          "portAllocation": "none",
+          "primaryEncap": "unknown",
+          "primaryEncapInner": "unknown",
+          "resImedcy": "immediate",
+          "secondaryEncapInner": "unknown",
+          "switchingMode": "native",
+          "tDn": "uni/phys-Fab2",
+          "untagged": "no"
+
+  }
+
+}
+
 
 resource "aci_contract" "contract_admin" {
   tenant_dn = "${aci_tenant.demo.id}"
