@@ -18,7 +18,7 @@ void slackTalk(msg) {
 pipeline {
  agent any
  tools {
-    "org.jenkinsci.plugins.terraform.TerraformInstallation" "Terraform"
+    "org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform"
  }
 
  environment {
