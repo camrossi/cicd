@@ -87,7 +87,7 @@ resource "vsphere_virtual_machine" "vm" {
      connection {
         type          = "ssh"
         user          = "cisco"
-        password      = "cisco"
+        password      = "123Cisco123"
      }
    }
    provisioner "file" {
@@ -96,7 +96,7 @@ resource "vsphere_virtual_machine" "vm" {
      connection {
         type          = "ssh"
         user          = "cisco"
-        password      = "cisco"
+        password      = "123Cisco123"
      }
    }
    
@@ -111,7 +111,7 @@ resource "vsphere_virtual_machine" "vm" {
      connection {
         type          = "ssh"
         user          = "cisco"
-        password      = "cisco"
+        password      = "123Cisco123"
      }
   } 
 

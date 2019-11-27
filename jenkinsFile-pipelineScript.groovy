@@ -82,79 +82,79 @@ pipeline {
      }
    }
    
-//   stage('Terraform plan for VMware') {
-//     steps {
-//       dir('dev/VMWARE'){
-//         ansiColor('xterm'){
-//           sh 'terraform plan -out=plan'
-//         }
-//       }
-//     }
-//   }
-//    
-//   stage('Apply VMware plan') {
-//     steps {
-//       script{
-//         dir('dev/VMWARE'){
-//           ansiColor('xterm'){
-//             sh 'terraform apply -auto-approve'
-//           }
-//         }
-//       }
-//     }
-//   }
-//   
-//   stage('Launch web server'){
-//     steps{
-//       script{
-//     def client = [:]
-//     client.name = "1.1.1.100"
-//     client.host = "1.1.1.100"
-//     client.allowAnyHosts = true
-//     def server = [:]
-//     server.name = "1.1.1.200"
-//     server.host = "1.1.1.200"
-//     server.allowAnyHosts = true
-//     withCredentials([usernamePassword(credentialsId: 'sshUserAccount', passwordVariable: 'password', usernameVariable: 'userName')]) {
-//         server.user = userName
-//         server.password = password
-//         client.user = userName
-//         client.password = password
-//         stage("SSH into Web Server") {
-//           script{
-//             try {
-//               timeout(time: 30, unit: 'SECONDS') {
-//                 sshCommand remote: server, command: '/home/cisco/start_app.sh &' 
-//               }
-//             } catch (err){
-//                 // we actually will enter the timeout phase
-//                 // that is because SSH command starts a shell which keeps hanging there forever
-//                 // after 30 seconds, we exit and end up here where we test app.py
-//                 def res = sshCommand remote: server, command: 'curl -s http://1.1.1.200:8080/hello'
-//                 if (res.equals("<h1>You have reached the hello page</h1>")){
-//                   // currentBuild.result = 'SUCCESS'
-//                 } else{
-//                     currentBuild.result = 'FAILURE'
-//                   }
-//                   
-//               }
-//           }   
-//         }            
-//       }
-//       stage("Validate ACI contract") {
-//           script{
-//               def res = sshCommand remote: client, command: 'curl -s http://1.1.1.200:8080/hello' 
-//               if (res.equals("<h1>You have reached the hello page</h1>")){
-//                   // currentBuild.result = 'SUCCESS'
-//                 } else{
-//                     currentBuild.result = 'FAILURE'
-//                   }
-//           }
-//       }
-//         
-//     } 
-//    }
-//   }
+   stage('Terraform plan for VMware') {
+     steps {
+       dir('dev/VMWARE'){
+         ansiColor('xterm'){
+           sh 'terraform plan -out=plan'
+         }
+       }
+     }
+   }
+    
+   stage('Apply VMware plan') {
+     steps {
+       script{
+         dir('dev/VMWARE'){
+           ansiColor('xterm'){
+             sh 'terraform apply -auto-approve'
+           }
+         }
+       }
+     }
+   }
+   
+   stage('Launch web server'){
+     steps{
+       script{
+     def client = [:]
+     client.name = "1.1.1.100"
+     client.host = "1.1.1.100"
+     client.allowAnyHosts = true
+     def server = [:]
+     server.name = "1.1.1.200"
+     server.host = "1.1.1.200"
+     server.allowAnyHosts = true
+     withCredentials([usernamePassword(credentialsId: 'sshUserAccount', passwordVariable: 'password', usernameVariable: 'userName')]) {
+         server.user = userName
+         server.password = password
+         client.user = userName
+         client.password = password
+         stage("SSH into Web Server") {
+           script{
+             try {
+               timeout(time: 30, unit: 'SECONDS') {
+                 sshCommand remote: server, command: '/home/cisco/start_app.sh &' 
+               }
+             } catch (err){
+                 // we actually will enter the timeout phase
+                 // that is because SSH command starts a shell which keeps hanging there forever
+                 // after 30 seconds, we exit and end up here where we test app.py
+                 def res = sshCommand remote: server, command: 'curl -s http://1.1.1.200:8080/hello'
+                 if (res.equals("<h1>You have reached the hello page</h1>")){
+                   // currentBuild.result = 'SUCCESS'
+                 } else{
+                     currentBuild.result = 'FAILURE'
+                   }
+                   
+               }
+           }   
+         }            
+       }
+       stage("Validate ACI contract") {
+           script{
+               def res = sshCommand remote: client, command: 'curl -s http://1.1.1.200:8080/hello' 
+               if (res.equals("<h1>You have reached the hello page</h1>")){
+                   // currentBuild.result = 'SUCCESS'
+                 } else{
+                     currentBuild.result = 'FAILURE'
+                   }
+           }
+       }
+         
+     } 
+    }
+   }
 
   } 
 } 
