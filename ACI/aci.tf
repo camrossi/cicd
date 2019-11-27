@@ -37,6 +37,11 @@ data "aci_vmm_domain" "vds" {
   name                = "ACI"
 }
 
+data "aci_phys_domain" "Fab2" {
+  provider_profile_dn = "uni/phys-"
+  name                = "Fab2"
+}
+
 resource "aci_application_epg" "epg1" {
   application_profile_dn = "${aci_application_profile.app1.id}"
   name                   = "epg1"
@@ -58,7 +63,7 @@ resource "aci_application_epg" "admin" {
   application_profile_dn = "${aci_application_profile.app1.id}"
   name                   = "admin"
   relation_fv_rs_bd      = "${aci_bridge_domain.bd1.name}"
-  relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}"]
+  relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}","${data.aci_phys_domain.Fab2.id}"]
   relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
 }
 
