@@ -11,7 +11,7 @@ variable "aciCertName" {
   default = "ansible"
 }
 variable "aciUrl" {
-  default = "https://10.0.99.11"
+  default = "https://fab1-apic1.cam.ciscolabs.com"
 }
 
 variable "bd_subnet" {

@@ -14,17 +14,6 @@ void slackTalk(msg) {
     sh "curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"${msg}\"}' https://hooks.slack.com/services/$T/$B/$S"
 }
 
-void webexTeamsTalk(msg) {
-    // to obtain the bearer and roomId, create a space first
-    // add a bot to it, you will receive the bearer to use for authentication
-    // to get the roomId, visit developer.ciscospark.com and use the get rooms API
-    botId = "Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OL2M0N2M2NjgwLTIxOGUtNGI4My1hNDIxLWE2ODFiMGRlYzdlOQ"
-    bearer = "OTA1N2E1NjYtMDU4ZC00OTQ0LTlkMjUtYzk3N2U2ZjI0NzBlZTg3NmE2OWUtMzNl_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f"
-    botName = "cpaggen-jenkins"
-    botUsername = "cpaggen-jenkins@webex.bot"
-    roomId = "Y2lzY29zcGFyazovL3VzL1JPT00vOWY4MDA4ODAtMDYwNi0xMWVhLWIyNjctZjE5N2Y2Y2NhZWZm"
-    sh "curl -X POST -H 'Content-type: application/json' -H 'Authorization: Bearer ${bearer}' --data '{\"roomId\":\"${roomId}\",\"text\":\"${msg}\"}' https://api.ciscospark.com/v1/messages"
-}
 
 pipeline {
  agent any
@@ -45,7 +34,6 @@ pipeline {
      steps {
        dir('dev'){
          ansiColor('xterm'){
-           webexTeamsTalk("ACI-VMware: fetching source from Git")
            git branch: 'master', url: 'http://10.0.76.250/cisco/onprem.git'
          }
        }
@@ -56,7 +44,6 @@ pipeline {
      steps {
        dir('dev/ACI'){
          ansiColor('xterm'){
-           webexTeamsTalk("ACI-VMware: terraform init ACI")
            sh "terraform init -input=false -upgrade"
            sh "echo \$PWD" 
          }    
@@ -68,7 +55,6 @@ pipeline {
      steps {
        dir('dev/VMWARE'){
          ansiColor('xterm'){
-           webexTeamsTalk("ACI-VMware: terraform init VMware")
            sh "terraform init -input=false -upgrade"
            sh "echo \$PWD" 
          }    
@@ -80,7 +66,6 @@ pipeline {
      steps {
        dir('dev/ACI'){ 
          ansiColor('xterm') {
-           webexTeamsTalk("ACI-VMware: terraform plan ACI")
            sh 'terraform plan -out=plan'
          }
        }
@@ -91,97 +76,85 @@ pipeline {
      steps {
        dir('dev/ACI'){
          ansiColor('xterm'){
-           webexTeamsTalk("ACI-VMware: terraform apply ACI")
            sh 'terraform apply -auto-approve'
          }
        }
      }
    }
-   
-   stage('Terraform plan for VMware') {
-     steps {
-       dir('dev/VMWARE'){
-         ansiColor('xterm'){
-           webexTeamsTalk("ACI-VMware: terraform plan VMware")
-           sh 'terraform plan -out=plan'
-         }
-       }
-     }
-   }
-    
-   stage('Apply VMware plan') {
-     steps {
-       script{
-         dir('dev/VMWARE'){
-           ansiColor('xterm'){
-             webexTeamsTalk("ACI-VMware: terraform apply VMware")
-             sh 'terraform apply -auto-approve'
-           }
-         }
-       }
-     }
-   }
-   
-   stage('Launch web server'){
-     steps{
-       script{
-     def client = [:]
-     client.name = "1.1.1.100"
-     client.host = "1.1.1.100"
-     client.allowAnyHosts = true
-     def server = [:]
-     server.name = "1.1.1.200"
-     server.host = "1.1.1.200"
-     server.allowAnyHosts = true
-     withCredentials([usernamePassword(credentialsId: 'sshUserAccount', passwordVariable: 'password', usernameVariable: 'userName')]) {
-         server.user = userName
-         server.password = password
-         client.user = userName
-         client.password = password
-         stage("SSH into Web Server") {
-           script{
-             try {
-               timeout(time: 30, unit: 'SECONDS') {
-                 webexTeamsTalk("ACI-VMware: starting app.py via SSH")
-                 sshCommand remote: server, command: '/home/cisco/start_app.sh &' 
-               }
-             } catch (err){
-                 // we actually will enter the timeout phase
-                 // that is because SSH command starts a shell which keeps hanging there forever
-                 // after 30 seconds, we exit and end up here where we test app.py
-                 webexTeamsTalk("ACI-VMware: SSH timeout activated - testing app.py")
-                 def res = sshCommand remote: server, command: 'curl -s http://1.1.1.200:8080/hello'
-                 webexTeamsTalk(res)
-                 if (res.equals("<h1>You have reached the hello page</h1>")){
-                   webexTeamsTalk("ACI-VMware: server is up and running")
-                   // currentBuild.result = 'SUCCESS'
-                 } else{
-                     webexTeamsTalk("ACI-VMware: web site is not up")
-                     currentBuild.result = 'FAILURE'
-                   }
-                   
-               }
-           }   
-         }            
-       }
-       stage("Validate ACI contract") {
-           script{
-               webexTeamsTalk("ACI-VMware: curl server:8080 from client")
-               def res = sshCommand remote: client, command: 'curl -s http://1.1.1.200:8080/hello' 
-               webexTeamsTalk(res)
-               if (res.equals("<h1>You have reached the hello page</h1>")){
-                   webexTeamsTalk("ACI-VMware: ACI contract is operational")
-                   // currentBuild.result = 'SUCCESS'
-                 } else{
-                     webexTeamsTalk("ACI-VMware: ACI contract not allowing 8080")
-                     currentBuild.result = 'FAILURE'
-                   }
-           }
-       }
-         
-     } 
-    }
-   }
+#   
+#   stage('Terraform plan for VMware') {
+#     steps {
+#       dir('dev/VMWARE'){
+#         ansiColor('xterm'){
+#           sh 'terraform plan -out=plan'
+#         }
+#       }
+#     }
+#   }
+#    
+#   stage('Apply VMware plan') {
+#     steps {
+#       script{
+#         dir('dev/VMWARE'){
+#           ansiColor('xterm'){
+#             sh 'terraform apply -auto-approve'
+#           }
+#         }
+#       }
+#     }
+#   }
+#   
+#   stage('Launch web server'){
+#     steps{
+#       script{
+#     def client = [:]
+#     client.name = "1.1.1.100"
+#     client.host = "1.1.1.100"
+#     client.allowAnyHosts = true
+#     def server = [:]
+#     server.name = "1.1.1.200"
+#     server.host = "1.1.1.200"
+#     server.allowAnyHosts = true
+#     withCredentials([usernamePassword(credentialsId: 'sshUserAccount', passwordVariable: 'password', usernameVariable: 'userName')]) {
+#         server.user = userName
+#         server.password = password
+#         client.user = userName
+#         client.password = password
+#         stage("SSH into Web Server") {
+#           script{
+#             try {
+#               timeout(time: 30, unit: 'SECONDS') {
+#                 sshCommand remote: server, command: '/home/cisco/start_app.sh &' 
+#               }
+#             } catch (err){
+#                 // we actually will enter the timeout phase
+#                 // that is because SSH command starts a shell which keeps hanging there forever
+#                 // after 30 seconds, we exit and end up here where we test app.py
+#                 def res = sshCommand remote: server, command: 'curl -s http://1.1.1.200:8080/hello'
+#                 if (res.equals("<h1>You have reached the hello page</h1>")){
+#                   // currentBuild.result = 'SUCCESS'
+#                 } else{
+#                     currentBuild.result = 'FAILURE'
+#                   }
+#                   
+#               }
+#           }   
+#         }            
+#       }
+#       stage("Validate ACI contract") {
+#           script{
+#               def res = sshCommand remote: client, command: 'curl -s http://1.1.1.200:8080/hello' 
+#               if (res.equals("<h1>You have reached the hello page</h1>")){
+#                   // currentBuild.result = 'SUCCESS'
+#                 } else{
+#                     currentBuild.result = 'FAILURE'
+#                   }
+#           }
+#       }
+#         
+#     } 
+#    }
+#   }
 
   } 
 } 
