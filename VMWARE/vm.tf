@@ -37,7 +37,7 @@ data "vsphere_compute_cluster" "cluster" {
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "alpine3.8"
+  name          = "UbuntuServer16"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
