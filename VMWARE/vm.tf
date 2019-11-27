@@ -8,16 +8,16 @@ provider "vsphere" {
 }
 
 data "vsphere_datacenter" "dc" {
-  name = "Datacenter-OnPrem"
+  name = "STLD"
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "HDD-Local"
+  name          = "ESX1i-DS"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
 data "vsphere_distributed_virtual_switch" "dvs" {
-  name          = "ACI-DVS"
+  name          = "ACI"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
@@ -32,12 +32,12 @@ data "vsphere_network" "pg2" {
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "DMZ"
+  name          = "Cluster1"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "lubuntu-template"
+  name          = "alpine3.8"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
@@ -52,7 +52,7 @@ locals {
     "vm2" = "1.1.1.200"
   }
   gateway = "1.1.1.1"
-  domain = "ospeg2.cisco.com"
+  domain = "cam.ciscolabs.com"
   prefixlen = "24"
 }
 

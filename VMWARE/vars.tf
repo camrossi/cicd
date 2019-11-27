@@ -1,21 +1,21 @@
 variable "vsphere_user" {
-  default = "administrator@aws.local"
+  default = "administrator@vsphere.local"
 }
 variable "vsphere_password" {
-  default = "C15co123!"
+  default = "123Cisco123!"
 }
 variable "vsphere_server" {
-  default = "10.0.99.22"
+  default = "vc1.cam.ciscolabs.com"
 }
 variable "ssh_user" {
   default = "cisco"
 }
 variable "ssh_password" {
-  default = "cisco"
+  default = "123Cisco123"
 }
 variable "dnsServers" {
   type = "list"
-  default = ["10.0.50.21"]
+  default = ["192.168.66.1"]
 }
 
 variable "vmPrefix" {

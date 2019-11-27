@@ -81,28 +81,28 @@ pipeline {
        }
      }
    }
-//   
-//   stage('Terraform plan for VMware') {
-//     steps {
-//       dir('dev/VMWARE'){
-//         ansiColor('xterm'){
-//           sh 'terraform plan -out=plan'
-//         }
-//       }
-//     }
-//   }
-//    
-//   stage('Apply VMware plan') {
-//     steps {
-//       script{
-//         dir('dev/VMWARE'){
-//           ansiColor('xterm'){
-//             sh 'terraform apply -auto-approve'
-//           }
-//         }
-//       }
-//     }
-//   }
+   
+   stage('Terraform plan for VMware') {
+     steps {
+       dir('dev/VMWARE'){
+         ansiColor('xterm'){
+           sh 'terraform plan -out=plan'
+         }
+       }
+     }
+   }
+    
+   stage('Apply VMware plan') {
+     steps {
+       script{
+         dir('dev/VMWARE'){
+           ansiColor('xterm'){
+             sh 'terraform apply -auto-approve'
+           }
+         }
+       }
+     }
+   }
 //   
 //   stage('Launch web server'){
 //     steps{
