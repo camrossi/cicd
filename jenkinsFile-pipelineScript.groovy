@@ -44,7 +44,7 @@ pipeline {
      steps {
        dir('dev/ACI'){
          ansiColor('xterm'){
-           sh "terraform init -input=false -upgrade"
+           sh "terraform init -input=false -force-copy -upgrade"
            sh "echo \$PWD" 
          }    
        }
@@ -55,7 +55,7 @@ pipeline {
      steps {
        dir('dev/VMWARE'){
          ansiColor('xterm'){
-           sh "terraform init -input=false -upgrade"
+           sh "terraform init -input=false -force-copy -upgrade"
            sh "echo \$PWD" 
          }    
        }
