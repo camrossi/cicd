@@ -1,6 +1,6 @@
 terraform {
   backend "local" {
-    path = "/aci.tfstate"
+    path = "/share/tfstate/aci.tfstate"
   }
 }
 
