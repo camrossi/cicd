@@ -1,3 +1,8 @@
+terraform {
+  backend "local" {
+    path = "/share/tfstate/aci.tfstate"
+  }
+}
 provider "aci" {
   username = "${var.aciUser}"
   private_key = "${var.aciPrivateKey}"

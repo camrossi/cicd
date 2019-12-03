@@ -83,27 +83,27 @@ pipeline {
      }
    }
    
-   stage('Terraform Destroy plan for VMware') {
-     steps {
-       dir('dev/VMWARE'){
-         ansiColor('xterm'){
-           sh 'terraform plan -destroy -out=plan'
-         }
-       }
-     }
-   }
-    
-   stage('Destroy VMware plan') {
-     steps {
-       script{
-         dir('dev/VMWARE'){
-           ansiColor('xterm'){
-             sh 'terraform apply -auto-approve'
-           }
-         }
-       }
-     }
-   }
+//   stage('Terraform Destroy plan for VMware') {
+//     steps {
+//       dir('dev/VMWARE'){
+//         ansiColor('xterm'){
+//           sh 'terraform plan -destroy -out=plan'
+//         }
+//       }
+//     }
+//   }
+//    
+//   stage('Destroy VMware plan') {
+//     steps {
+//       script{
+//         dir('dev/VMWARE'){
+//           ansiColor('xterm'){
+//             sh 'terraform apply -auto-approve'
+//           }
+//         }
+//       }
+//     }
+//   }
 
    stage('Terraform plan for VMware') {
      steps {
