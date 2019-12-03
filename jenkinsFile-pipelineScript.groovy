@@ -44,7 +44,7 @@ pipeline {
      steps {
        dir('dev/ACI'){
          ansiColor('xterm'){
-           sh "terraform init -input=false -upgrade"
+           sh "terraform init -input=false -upgrade -backend=local -backend-config='path=/'"
            sh "echo \$PWD" 
          }    
        }
@@ -55,9 +55,29 @@ pipeline {
      steps {
        dir('dev/VMWARE'){
          ansiColor('xterm'){
-           sh "terraform init -input=false -upgrade"
+           sh "terraform init -input=false -upgrade  -backend=local -backend-config='path=/'"
            sh "echo \$PWD" 
          }    
+       }
+     }
+   }
+
+   stage('Terraform Destroy Plan for ACI') {
+     steps {
+       dir('dev/ACI'){ 
+         ansiColor('xterm') {
+           sh 'terraform plan -destroy -out=plan'
+         }
+       }
+     }
+   }
+  
+   stage('Destroy ACI plan') {
+     steps {
+       dir('dev/ACI'){
+         ansiColor('xterm'){
+           sh 'terraform apply -auto-approve'
+         }
        }
      }
    }
@@ -71,7 +91,7 @@ pipeline {
        }
      }
    }
-  
+
    stage('Apply ACI plan') {
      steps {
        dir('dev/ACI'){
@@ -82,6 +102,28 @@ pipeline {
      }
    }
    
+   stage('Terraform Destroy plan for VMware') {
+     steps {
+       dir('dev/VMWARE'){
+         ansiColor('xterm'){
+           sh 'terraform plan -destroy -out=plan'
+         }
+       }
+     }
+   }
+    
+   stage('Destroy VMware plan') {
+     steps {
+       script{
+         dir('dev/VMWARE'){
+           ansiColor('xterm'){
+             sh 'terraform apply -auto-approve'
+           }
+         }
+       }
+     }
+   }
+
    stage('Terraform plan for VMware') {
      steps {
        dir('dev/VMWARE'){
@@ -91,7 +133,8 @@ pipeline {
        }
      }
    }
-    
+
+
    stage('Apply VMware plan') {
      steps {
        script{
@@ -103,6 +146,8 @@ pipeline {
        }
      }
    }
+
+
    
    stage('Launch web server'){
      steps{

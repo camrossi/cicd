@@ -1,3 +1,9 @@
+terraform {
+  backend "local" {
+    path = "/"
+  }
+}
+
 provider "aci" {
   username = "${var.aciUser}"
   private_key = "${var.aciPrivateKey}"
