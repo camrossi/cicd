@@ -1,9 +1,3 @@
-terraform {
-  backend "local" {
-    path = "/share/tfstate/aci.tfstate"
-  }
-}
-
 provider "aci" {
   username = "${var.aciUser}"
   private_key = "${var.aciPrivateKey}"
@@ -88,9 +82,7 @@ resource "aci_rest" "rest_pysdom" {
                          "tDn"= "uni/phys-Fab2"
                          "untagged"= "no"
               }
-
 }
-
 
 resource "aci_rest" "rest_port" {
   path       = "/api/node/mo/${aci_application_epg.admin.id}/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]].json"

@@ -62,25 +62,6 @@ pipeline {
      }
    }
 
-   stage('Terraform Destroy Plan for ACI') {
-     steps {
-       dir('dev/ACI'){ 
-         ansiColor('xterm') {
-           sh 'terraform plan -destroy -out=plan'
-         }
-       }
-     }
-   }
-  
-   stage('Destroy ACI plan') {
-     steps {
-       dir('dev/ACI'){
-         ansiColor('xterm'){
-           sh 'terraform apply -auto-approve'
-         }
-       }
-     }
-   }
 
    stage('Terraform Plan for ACI') {
      steps {
