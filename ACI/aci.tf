@@ -95,17 +95,17 @@ resource "aci_application_epg" "epg2" {
 #          "tDn"= "topology/pod-1/paths-204/pathep-[eth1/4]"
 #        }
 #}
-#
-#resource "aci_contract" "contract_admin" {
-#  tenant_dn = "${aci_tenant.demo.id}"
-#  name      = "admin"
-#}
-#
-#resource "aci_contract_subject" "admin_subject" {
-#  contract_dn                  = "${aci_contract.contract_admin.id}"
-#  name                         = "Subject"
-#  relation_vz_rs_subj_filt_att = ["${aci_filter.allow_ssh.name}"]
-#}
+
+resource "aci_contract" "contract_admin" {
+  tenant_dn = "${aci_tenant.demo.id}"
+  name      = "admin"
+}
+
+resource "aci_contract_subject" "admin_subject" {
+  contract_dn                  = "${aci_contract.contract_admin.id}"
+  name                         = "Subject"
+  relation_vz_rs_subj_filt_att = ["${aci_filter.allow_ssh.name}"]
+}
 
 resource "aci_contract" "contract_epg1_epg2" {
   tenant_dn = "${aci_tenant.demo.id}"
