@@ -54,37 +54,36 @@ resource "aci_application_epg" "epg2" {
   relation_fv_rs_prov    = ["${aci_contract.contract_epg1_epg2.name}","${aci_contract.contract_admin.name}"]
 }
 
-resource "aci_application_epg" "admin" {
-  application_profile_dn = "${aci_application_profile.app1.id}"
-  name                   = "admin"
-  relation_fv_rs_bd      = "${aci_bridge_domain.bd1.name}"
-  relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}"]
-  relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
-}
+#resource "aci_application_epg" "admin" {
+#  application_profile_dn = "${aci_application_profile.app1.id}"
+#  name                   = "admin"
+#  relation_fv_rs_bd      = "${aci_bridge_domain.bd1.name}"
+#  relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}"]
+#  relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
+#}
+#
+#resource "aci_rest" "rest_pysdom" {
+#  path       = "/api/node/mo/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
+#  class_name = "fvRsDomAtt"
+#  content = {
+#                         "bindingType"= "none"
+#                         "classPref"= "encap"
+#                         "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]"
+#                         "encapMode"= "auto"
+#                         "epgCos"= "Cos0"
+#                         "epgCosPref"= "disabled"
+#                         "instrImedcy"= "lazy"
+#                         "netflowDir"= "both"
+#                         "netflowPref"= "disabled"
+#                         "numPorts"= "0"
+#                         "portAllocation"= "none"
+#                         "resImedcy"= "immediate"
+#                         "switchingMode"= "native"
+#                         "tDn"= "uni/phys-Fab2"
+#                         "untagged"= "no"
+#              }
+#}
 
-resource "aci_rest" "rest_pysdom" {
-  path       = "/api/node/mo/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
-  class_name = "fvRsDomAtt"
-  content = {
-                         "bindingType"= "none"
-                         "classPref"= "encap"
-                         "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]"
-                         "encapMode"= "auto"
-                         "epgCos"= "Cos0"
-                         "epgCosPref"= "disabled"
-                         "instrImedcy"= "lazy"
-                         "netflowDir"= "both"
-                         "netflowPref"= "disabled"
-                         "numPorts"= "0"
-                         "portAllocation"= "none"
-                         "resImedcy"= "immediate"
-                         "switchingMode"= "native"
-                         "tDn"= "uni/phys-Fab2"
-                         "untagged"= "no"
-              }
-}
-
-#resource "aci_rest" "rest_port" {
 #  path       = "/api/node/mo/${aci_application_epg.admin.id}/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]].json"
 #  class_name = "fvRsPathAtt"
 #  content = {
@@ -96,17 +95,17 @@ resource "aci_rest" "rest_pysdom" {
 #          "tDn"= "topology/pod-1/paths-204/pathep-[eth1/4]"
 #        }
 #}
-
-resource "aci_contract" "contract_admin" {
-  tenant_dn = "${aci_tenant.demo.id}"
-  name      = "admin"
-}
-
-resource "aci_contract_subject" "admin_subject" {
-  contract_dn                  = "${aci_contract.contract_admin.id}"
-  name                         = "Subject"
-  relation_vz_rs_subj_filt_att = ["${aci_filter.allow_ssh.name}"]
-}
+#
+#resource "aci_contract" "contract_admin" {
+#  tenant_dn = "${aci_tenant.demo.id}"
+#  name      = "admin"
+#}
+#
+#resource "aci_contract_subject" "admin_subject" {
+#  contract_dn                  = "${aci_contract.contract_admin.id}"
+#  name                         = "Subject"
+#  relation_vz_rs_subj_filt_att = ["${aci_filter.allow_ssh.name}"]
+#}
 
 resource "aci_contract" "contract_epg1_epg2" {
   tenant_dn = "${aci_tenant.demo.id}"
