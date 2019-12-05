@@ -54,14 +54,14 @@ resource "aci_application_epg" "epg2" {
   relation_fv_rs_prov    = ["${aci_contract.contract_epg1_epg2.name}","${aci_contract.contract_admin.name}"]
 }
 
-#resource "aci_application_epg" "admin" {
-#  application_profile_dn = "${aci_application_profile.app1.id}"
-#  name                   = "admin"
-#  relation_fv_rs_bd      = "${aci_bridge_domain.bd1.name}"
-#  relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}"]
-#  relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
-#}
-#
+resource "aci_application_epg" "admin" {
+  application_profile_dn = "${aci_application_profile.app1.id}"
+  name                   = "admin"
+  relation_fv_rs_bd      = "${aci_bridge_domain.bd1.name}"
+  relation_fv_rs_dom_att = ["${data.aci_vmm_domain.vds.id}"]
+  relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
+}
+
 #resource "aci_rest" "rest_pysdom" {
 #  path       = "/api/node/mo/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
 #  class_name = "fvRsDomAtt"
