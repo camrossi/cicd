@@ -77,7 +77,8 @@ pipeline {
      steps {
        dir('dev/ACI'){
          ansiColor('xterm'){
-           sh 'terraform apply -auto-approve'
+#           sh 'terraform apply -auto-approve'
+            sh 'python aci.py'
          }
        }
      }
