@@ -62,39 +62,40 @@ resource "aci_application_epg" "admin" {
   relation_fv_rs_cons    = ["${aci_contract.contract_admin.name}"]
 }
 
-#resource "aci_rest" "rest_pysdom" {
-#  path       = "/api/node/mo/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
-#  class_name = "fvRsDomAtt"
-#  content = {
-#                         "bindingType"= "none"
-#                         "classPref"= "encap"
-#                         "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]"
-#                         "encapMode"= "auto"
-#                         "epgCos"= "Cos0"
-#                         "epgCosPref"= "disabled"
-#                         "instrImedcy"= "lazy"
-#                         "netflowDir"= "both"
-#                         "netflowPref"= "disabled"
-#                         "numPorts"= "0"
-#                         "portAllocation"= "none"
-#                         "resImedcy"= "immediate"
-#                         "switchingMode"= "native"
-#                         "tDn"= "uni/phys-Fab2"
-#                         "untagged"= "no"
-#              }
-#}
+resource "aci_rest" "rest_pysdom" {
+  path       = "/api/node/mo/${aci_application_epg.admin.id}/rsdomAtt-[uni/phys-Fab2].json"
+  class_name = "fvRsDomAtt"
+  content = {
+                         "bindingType"= "none"
+                         "classPref"= "encap"
+                         "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rsdomAtt-[uni/phys-Fab2]"
+                         "encapMode"= "auto"
+                         "epgCos"= "Cos0"
+                         "epgCosPref"= "disabled"
+                         "instrImedcy"= "lazy"
+                         "netflowDir"= "both"
+                         "netflowPref"= "disabled"
+                         "numPorts"= "0"
+                         "portAllocation"= "none"
+                         "resImedcy"= "immediate"
+                         "switchingMode"= "native"
+                         "tDn"= "uni/phys-Fab2"
+                         "untagged"= "no"
+              }
+}
 
-#  path       = "/api/node/mo/${aci_application_epg.admin.id}/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]].json"
-#  class_name = "fvRsPathAtt"
-#  content = {
-#          "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]]"
-#          "encap"= "vlan-3992"
-#          "instrImedcy"= "lazy"
-#          "mode"= "regular"
-#          "primaryEncap"= "unknown"
-#          "tDn"= "topology/pod-1/paths-204/pathep-[eth1/4]"
-#        }
-#}
+resource "aci_rest" "rest_port" {
+  path       = "/api/node/mo/${aci_application_epg.admin.id}/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]].json"
+  class_name = "fvRsPathAtt"
+  content = {
+          "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]]"
+          "encap"= "vlan-3992"
+          "instrImedcy"= "lazy"
+          "mode"= "regular"
+          "primaryEncap"= "unknown"
+          "tDn"= "topology/pod-1/paths-204/pathep-[eth1/4]"
+        }
+}
 
 resource "aci_contract" "contract_admin" {
   tenant_dn = "${aci_tenant.demo.id}"
