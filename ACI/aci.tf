@@ -84,18 +84,18 @@ resource "aci_rest" "rest_pysdom" {
               }
 }
 
-resource "aci_rest" "rest_port" {
-  path       = "/api/node/mo/${aci_application_epg.admin.id}/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]].json"
-  class_name = "fvRsPathAtt"
-  content = {
-          "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]]"
-          "encap"= "vlan-3992"
-          "instrImedcy"= "lazy"
-          "mode"= "regular"
-          "primaryEncap"= "unknown"
-          "tDn"= "topology/pod-1/paths-204/pathep-[eth1/4]"
-        }
-}
+#resource "aci_rest" "rest_port" {
+#  path       = "/api/node/mo/${aci_application_epg.admin.id}/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]].json"
+#  class_name = "fvRsPathAtt"
+#  content = {
+#          "dn"= "uni/tn-terraformDemo/ap-app1/epg-admin/rspathAtt-[topology/pod-1/paths-204/pathep-[eth1/4]]"
+#          "encap"= "vlan-3992"
+#          "instrImedcy"= "lazy"
+#          "mode"= "regular"
+#          "primaryEncap"= "unknown"
+#          "tDn"= "topology/pod-1/paths-204/pathep-[eth1/4]"
+#        }
+#}
 
 resource "aci_contract" "contract_admin" {
   tenant_dn = "${aci_tenant.demo.id}"
