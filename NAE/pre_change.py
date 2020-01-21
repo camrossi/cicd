@@ -28,7 +28,7 @@ nae = cnae.NAE (args.nae_ip)
 #Log in to NAE with user and password
 nae.login(args.user, args.nae_password,args.domain)
 config = '''
-    {
+{
       "bd_change": {
         "action": "ADD",
         "dn": "uni/tn-Camillo/BD-BD2",
@@ -38,21 +38,24 @@ config = '''
         "ip_learning": "yes",
         "limit_ip_learn_to_subnets": "yes",
         "unk_mac_ucast_act": "proxy",
-        "unicast_route": "no",
+        "unicast_route": "yes",
         "multi_dst_pkt_act": "bd-flood",
         "unk_mcast_act": "flood",
         "multi_cast_allow": "no",
         "vrf_name": "VRF1"
-      },
+      }
+    },
+    {
       "network_subnet_change": {
-        "action":"ADD",
-        "dn":"uni/tn-Camillo/BD-BD2/subnet-1.1.0.1/16",
-        "scope":"private",
-        "make_this_primary_ip_address":"no",
-        "treat_as_virtual_ip_address":"no",
-        "subnet_control":"nd"
-        }
+        "action": "ADD",
+        "dn": "uni/tn-Camillo/BD-BD2/subnet-1.0.0.1/8",
+        "scope": "private",
+        "make_this_primary_ip_address": "no",
+        "treat_as_virtual_ip_address": "no",
+        "subnet_control": "nd"
+      }
     }
+
 
 '''
 nae.createPreChange("FAB2","Verify", config)
