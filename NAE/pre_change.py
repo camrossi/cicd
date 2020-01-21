@@ -16,17 +16,17 @@ def get_args():
     parser.add_argument('-u', dest='user', help='Username, default: admin', default='admin')
     parser.add_argument('-d', dest='domain', help='Login Domain, defaul: Local',default='Local')
     parser.add_argument('-i', dest='nae_ip', help='IP address of the NAE Appliance',required=True)
+    parser.add_argument('-p', dest='nae_password', help='IP address of the NAE Appliance',required=True)
     args = parser.parse_args()
     return args
 
 
 args= get_args()
-nae_password= 'C@ndidadmin1234'
 #Create NAE Object
 nae = cnae.NAE (args.nae_ip)
 
 #Log in to NAE with user and password
-nae.login(args.user, nae_password,args.domain)
+nae.login(args.user, args.nae_password,args.domain)
 config = '''
     {
       "bd_change": {
