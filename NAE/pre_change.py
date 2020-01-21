@@ -43,8 +43,8 @@ config = '''
         "unk_mcast_act": "flood",
         "multi_cast_allow": "no",
         "vrf_name": "VRF1"
-      }
-      {"network_subnet_change": {
+      },
+      "network_subnet_change": {
         "action":"ADD",
         "dn":"uni/tn-Camillo/BD-BD2/subnet-1.1.0.1/16",
         "scope":"private",
