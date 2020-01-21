@@ -17,12 +17,12 @@ md.login()
 
 # the top level object on which operations will be made
 # Confirm the dn below is for your top dn
-topDn = cobra.mit.naming.Dn.fromString('uni/tn-terraformDemo')
+topDn = cobra.mit.naming.Dn.fromString('uni/tn-automationDemo')
 topParentDn = topDn.getParent()
 topMo = md.lookupByDn(topParentDn)
 
 # build the request using cobra syntax
-fvTenant = cobra.model.fv.Tenant(topMo, ownerKey=u'', name=u'terraformDemo', descr=u'created by terraform', nameAlias=u'', ownerTag=u'', annotation=u'')
+fvTenant = cobra.model.fv.Tenant(topMo, ownerKey=u'', name=u'automationDemo', descr=u'created by Amazing Automation', nameAlias=u'', ownerTag=u'', annotation=u'')
 vzBrCP = cobra.model.vz.BrCP(fvTenant, ownerKey=u'', name=u'Web', descr=u'', targetDscp=u'unspecified', intent=u'install', nameAlias=u'', ownerTag=u'', prio=u'unspecified', annotation=u'')
 vzSubj = cobra.model.vz.Subj(vzBrCP, revFltPorts=u'yes', descr=u'', prio=u'unspecified', targetDscp=u'unspecified', nameAlias=u'', consMatchT=u'AtleastOne', annotation=u'', provMatchT=u'AtleastOne', name=u'Subject')
 vzRsSubjFiltAtt = cobra.model.vz.RsSubjFiltAtt(vzSubj, action=u'permit', priorityOverride=u'default', directives=u'', annotation=u'', tnVzFilterName=u'allow_icmp')
@@ -75,7 +75,6 @@ fvRsBd3 = cobra.model.fv.RsBd(fvAEPg3, annotation=u'', tnFvBDName=u'bd1')
 
 
 # commit the generated code to APIC
-print toXMLStr(topMo)
 c = cobra.mit.request.ConfigRequest()
 c.addMo(topMo)
 md.commit(c)
