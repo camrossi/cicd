@@ -5,9 +5,8 @@ import time
 import argparse
 import getpass
 from pprint import pprint
-
+import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 
@@ -25,6 +24,7 @@ def get_args():
     return args
 
 
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 args= get_args()
 #Create NAE Object
 nae = cnae.NAE (args.nae_ip)
