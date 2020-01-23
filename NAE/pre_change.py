@@ -55,9 +55,12 @@ config = '''
         "subnet_control": "nd"
       }
     }
-
-
 '''
 nae.createPreChange("FAB2","Verify", config)
+if nae.getPreChangeResult("FAB2","Verify",True):
+    exit()
+else:
+    exit(1)
+    
 
 

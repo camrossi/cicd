@@ -9,6 +9,15 @@ import json
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from requests_toolbelt import MultipartEncoder
 
+GREEN = '\033[32m' # Green
+CYAN =  '\033[36m' # Cyan Text
+RED =  '\033[31m' # Red Text
+PURPLE =  '\033[35m' # Purple Text
+YELLOW =  '\033[33m' # Yellow Text
+BLUE =  '\033[34m' # Blue Text
+
+ENDC = '\033[m'
+
 class NAE:
     def __init__(self, ip_addr):
         self.ip_addr = ip_addr
@@ -340,7 +349,8 @@ class NAE:
 
 
 
-    def getEpochs(self, fabricName, pcv = False):
+    def getEpochs(self, fabricName, pcv = True):
+        print("Getting Epochs....")
         #Get all the epochs (sorted from oldest to new from a fabric. ToDo Add filter support based on times
         # By default I drop all the epoch of type Pre Change Verification. 
 
@@ -467,8 +477,84 @@ class NAE:
         else:
             self.logger.info("Error %s", req.content)
 
-    def getPreChangeResult(self,name):
-        pass    
+    def getPreChangeAnalyses(self, ag_name):
+        fabric_id = str(self.getAG(ag_name)['uuid'])
+        url = 'https://'+self.ip_addr+'/nae/api/v1/config-services/prechange-analysis?fabric_id='+fabric_id
+        response = requests.get(url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
+
+        return response.json()['value']['data']
+    
+    def getPreChangeAnalysis(self, ag_name, pre_change_analysis_name):
+        ret = self.getPreChangeAnalyses(ag_name)
+        for a in ret:
+            if a['name'] == pre_change_analysis_name:
+                return a
+        return None
+    
+    def getPreChangeResult(self,ag_name, pre_change_analysis_name, verbose_flag): 
+        fabric_id = str(self.getAG(ag_name)['uuid'])
+        analysis_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id'])
+        url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/event-severity'
+        response = requests.get(url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
+        epoch1_only_count = 0
+        epoch2_only_count = 0
+        both_epochs_count = 0
+        epoch1_count = 0
+        epoch2_count = 0
+        self.logger.info("<======== SMART EVENT COUNT ========>")
+        for x in response.json()['value']['data']:
+            if(x['bucket'] == "EVENT_SEVERITY_INFO"):
+                print(GREEN + "----------------------------", ENDC)
+                print(GREEN + "<-------- ✓ INFO ✓ -------->", ENDC)
+                print(GREEN + "----------------------------", ENDC)
+            if(x['bucket'] == "EVENT_SEVERITY_WARNING"):
+                print(CYAN + "-------------------------------", ENDC)
+                print(CYAN + "<-------- ! WARNING ! -------->", ENDC)
+                print(CYAN + "-------------------------------", ENDC)
+            if(x['bucket'] == "EVENT_SEVERITY_MINOR"):
+                print(YELLOW + "-------------------------------", ENDC)
+                print(YELLOW + "<-------- !! MINOR !! -------->", ENDC)
+                print(YELLOW + "-------------------------------", ENDC)
+            if(x['bucket'] == "EVENT_SEVERITY_MAJOR"):
+                print(PURPLE + "-----------------------------", ENDC)
+                print(PURPLE + "<-------- ⚠ MAJOR ⚠ -------->", ENDC)
+                print(PURPLE + "-----------------------------", ENDC)
+            if(x['bucket'] == "EVENT_SEVERITY_CRITICAL"):
+                print(RED + "----------------------------------", ENDC)               
+                print(RED + "<-------- ⓧ  CRITICAL ⓧ  -------->", ENDC)
+                print(RED + "----------------------------------", ENDC)
+            for y in (x['output']):
+                if(y['bucket'] == "EPOCH1_ONLY"):
+                    epoch1_only_count += y['count']
+                    print("Earlier Epoch Only: " + str(y['count']))
+                if(y['bucket'] == "EPOCH2_ONLY"):
+                    epoch2_only_count += y['count']
+                    print("Later Epoch Only: " + str(y['count']))              
+                if(y['bucket'] == "BOTH_EPOCHS"):
+                    both_epochs_count += y['count']
+                    print("Common: " + str(y['count']))
+                if(y['bucket'] == "EPOCH1"):
+                    epoch1_count += y['count']
+                    print("Earlier Epoch: " + str(y['count']))
+                if(y['bucket'] == "EPOCH2"):
+                    epoch2_count += y['count']
+                    print("Later Epoch: " + str(y['count']))    
+        print("====================================")
+        print("Totals:")
+        print("Earlier Epoch Only: " + str(epoch1_only_count))
+        print("Earlier Epoch: " + str(epoch1_count))
+        print("Common: " + str(both_epochs_count))
+        print("Later Epoch: " + str(epoch2_count))
+        if(epoch2_only_count > 0):
+            print(RED + "Later Epoch Only: " + str(epoch2_only_count), ENDC)
+            print(RED + "Pre-change Analyis '" + pre_change_analysis_name + "' failed.", ENDC)
+            print("====================================")
+            return False
+        print(GREEN + "Later Epoch Only: " + str(epoch2_only_count), ENDC)
+        print(GREEN + "Pre-change Analyis '" + pre_change_analysis_name + "'passed.", ENDC)
+        print("====================================")
+        return True        
+        # return json.dumps(response.json())
 
     def getTcamStats(self,ag_name):
         fabric_id = str(self.getAG(ag_name)['uuid'])
