@@ -6,7 +6,9 @@ import argparse
 import getpass
 from pprint import pprint
 
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # Enble logging at debug level
 logger = logging.getLogger('cnae')
 logger.setLevel(logging.INFO)
@@ -48,7 +50,7 @@ config = '''
     {
       "network_subnet_change": {
         "action": "ADD",
-        "dn": "uni/tn-Camillo/BD-BD2/subnet-2.0.0.1/8",
+        "dn": "uni/tn-Camillo/BD-BD2/subnet-1.0.0.1/8",
         "scope": "private",
         "make_this_primary_ip_address": "no",
         "treat_as_virtual_ip_address": "no",
@@ -56,8 +58,8 @@ config = '''
       }
     }
 '''
-nae.createPreChange("FAB2","Verify2", config)
-if nae.getPreChangeResult("FAB2","Verify2",True):
+nae.createPreChange("FAB2","Verify", config)
+if nae.getPreChangeResult("FAB2","Verify",True):
     exit()
 else:
     exit(1) 

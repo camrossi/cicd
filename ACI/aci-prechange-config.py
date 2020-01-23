@@ -9,7 +9,9 @@ import cobra.model.fv
 import cobra.model.vns
 import cobra.model.vz
 from cobra.internal.codec.xmlcodec import toXMLStr
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # log into an APIC and create a directory object
 ls = cobra.mit.session.LoginSession('https://10.67.185.102', 'admin', '123Cisco123')
 md = cobra.mit.access.MoDirectory(ls)
