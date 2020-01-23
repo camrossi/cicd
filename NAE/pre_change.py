@@ -7,8 +7,10 @@ import getpass
 from pprint import pprint
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+
+
 # Enble logging at debug level
 logger = logging.getLogger('cnae')
 logger.setLevel(logging.INFO)
