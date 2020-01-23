@@ -60,10 +60,12 @@ config = '''
       }
     }
 '''
-nae.createPreChange("FAB2","Verify", config)
-if nae.getPreChangeResult("FAB2","Verify",True):
+nae.createPreChange("FAB2","Fail", config)
+if nae.getPreChangeResult("FAB2","Fail",True):
+    #SUCCESS
     exit()
 else:
+    #FAIL
     exit(1) 
 
 
