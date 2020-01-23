@@ -9,6 +9,7 @@ import cobra.model.fv
 import cobra.model.vns
 import cobra.model.vz
 from cobra.internal.codec.xmlcodec import toXMLStr
+import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
