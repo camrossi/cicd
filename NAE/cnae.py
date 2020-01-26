@@ -6,17 +6,11 @@ import json
 from pprint import pprint
 import time
 import json
+import parseJSON
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from requests_toolbelt import MultipartEncoder
 
-GREEN = '\033[32m' # Green
-CYAN =  '\033[36m' # Cyan Text
-RED =  '\033[31m' # Red Text
-PURPLE =  '\033[35m' # Purple Text
-YELLOW =  '\033[33m' # Yellow Text
-BLUE =  '\033[34m' # Blue Text
 
-ENDC = '\033[m'
 
 class NAE:
     def __init__(self, ip_addr):
@@ -493,68 +487,31 @@ class NAE:
     
     def getPreChangeResult(self,ag_name, pre_change_analysis_name, verbose_flag): 
         fabric_id = str(self.getAG(ag_name)['uuid'])
+        early_epoch_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['base_epoch_id'])
+        # print(str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id']))
+        analysis_status = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['analysis_status'])
+        if(analysis_status == "SUBMITTTED"):
+            self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Submitted.")
+            return "SUBMITTTED"
+        if(analysis_status == "RUNNING"):
+            self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Running.")
+            return "RUNNING"
+        later_epoch_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['pre_change_epoch_uuid'])
         analysis_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id'])
+        no_response = False
         url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/event-severity'
         response = requests.get(url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
-        epoch1_only_count = 0
-        epoch2_only_count = 0
-        both_epochs_count = 0
-        epoch1_count = 0
-        epoch2_count = 0
         self.logger.info("<======== SMART EVENT COUNT ========>")
-        for x in response.json()['value']['data']:
-            if(x['bucket'] == "EVENT_SEVERITY_INFO"):
-                print(GREEN + "----------------------------", ENDC)
-                print(GREEN + "<-------- ✓ INFO ✓ -------->", ENDC)
-                print(GREEN + "----------------------------", ENDC)
-            if(x['bucket'] == "EVENT_SEVERITY_WARNING"):
-                print(CYAN + "-------------------------------", ENDC)
-                print(CYAN + "<-------- ! WARNING ! -------->", ENDC)
-                print(CYAN + "-------------------------------", ENDC)
-            if(x['bucket'] == "EVENT_SEVERITY_MINOR"):
-                print(YELLOW + "-------------------------------", ENDC)
-                print(YELLOW + "<-------- !! MINOR !! -------->", ENDC)
-                print(YELLOW + "-------------------------------", ENDC)
-            if(x['bucket'] == "EVENT_SEVERITY_MAJOR"):
-                print(PURPLE + "-----------------------------", ENDC)
-                print(PURPLE + "<-------- ⚠ MAJOR ⚠ -------->", ENDC)
-                print(PURPLE + "-----------------------------", ENDC)
-            if(x['bucket'] == "EVENT_SEVERITY_CRITICAL"):
-                print(RED + "----------------------------------", ENDC)               
-                print(RED + "<-------- ⓧ  CRITICAL ⓧ  -------->", ENDC)
-                print(RED + "----------------------------------", ENDC)
-            for y in (x['output']):
-                if(y['bucket'] == "EPOCH1_ONLY"):
-                    epoch1_only_count += y['count']
-                    print("Earlier Epoch Only: " + str(y['count']))
-                if(y['bucket'] == "EPOCH2_ONLY"):
-                    epoch2_only_count += y['count']
-                    print("Later Epoch Only: " + str(y['count']))              
-                if(y['bucket'] == "BOTH_EPOCHS"):
-                    both_epochs_count += y['count']
-                    print("Common: " + str(y['count']))
-                if(y['bucket'] == "EPOCH1"):
-                    epoch1_count += y['count']
-                    print("Earlier Epoch: " + str(y['count']))
-                if(y['bucket'] == "EPOCH2"):
-                    epoch2_count += y['count']
-                    print("Later Epoch: " + str(y['count']))    
-        print("====================================")
-        print("Totals:")
-        print("Earlier Epoch Only: " + str(epoch1_only_count))
-        print("Earlier Epoch: " + str(epoch1_count))
-        print("Common: " + str(both_epochs_count))
-        print("Later Epoch: " + str(epoch2_count))
-        if(epoch2_only_count > 0):
-            print(RED + "Later Epoch Only: " + str(epoch2_only_count), ENDC)
-            print(RED + "Pre-change Analyis '" + pre_change_analysis_name + "' failed.", ENDC)
-            print("====================================")
-            return False
-        print(GREEN + "Later Epoch Only: " + str(epoch2_only_count), ENDC)
-        print(GREEN + "Pre-change Analyis '" + pre_change_analysis_name + "'passed.", ENDC)
-        print("====================================")
-        return True        
-        # return json.dumps(response.json())
+        if(verbose_flag):
+            print("FLAG!")
+            table_url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/aggregate-table'
+            print(table_url)
+            table_response = requests.get(table_url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
+            parse_table = parseJSON.Parser(response)
+            return parse_table.ParsePreChangeResults(parse_table.obj,pre_change_analysis_name,verbose_flag,table_response,early_epoch_id,later_epoch_id)
+        parse = parseJSON.Parser(response)
+        return parse.ParsePreChangeResults(parse.obj,pre_change_analysis_name,verbose_flag,no_response,early_epoch_id,later_epoch_id)
+        
 
     def getTcamStats(self,ag_name):
         fabric_id = str(self.getAG(ag_name)['uuid'])

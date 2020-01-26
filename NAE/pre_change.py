@@ -7,6 +7,7 @@ import getpass
 from pprint import pprint
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from time import sleep
 
 
 
@@ -60,8 +61,16 @@ config = '''
       }
     }
 '''
-nae.createPreChange("FAB2","Success", config)
-if nae.getPreChangeResult("FAB2","Success",True):
+nae.createPreChange("FAB2","Fail1", config)
+
+analysis_result = nae.getPreChangeResult("FAB2","Fail1",False)
+
+while "RUNNING" == analysis_result:
+    sleep(10)
+    analysis_result =  nae.getPreChangeResult("FAB2","Fail1",False)
+
+
+if analysis_result:
     #SUCCESS
     exit()
 else:
