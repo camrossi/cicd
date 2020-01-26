@@ -32,6 +32,8 @@ nae = cnae.NAE (args.nae_ip)
 
 #Log in to NAE with user and password
 nae.login(args.user, args.nae_password,args.domain)
+
+PCV_Name = "Success"
 config = '''
 {
       "bd_change": {
@@ -61,13 +63,13 @@ config = '''
       }
     }
 '''
-nae.createPreChange("FAB2","Fail1", config)
+nae.createPreChange("FAB2",PCV_name, config)
 
-analysis_result = nae.getPreChangeResult("FAB2","Fail1",False)
+analysis_result = nae.getPreChangeResult("FAB2",PCV_name,False)
 
 while "RUNNING" == analysis_result:
     sleep(10)
-    analysis_result =  nae.getPreChangeResult("FAB2","Fail1",False)
+    analysis_result =  nae.getPreChangeResult("FAB2",PCV_name,False)
 
 
 if analysis_result:
