@@ -33,7 +33,7 @@ nae = cnae.NAE (args.nae_ip)
 #Log in to NAE with user and password
 nae.login(args.user, args.nae_password,args.domain)
 
-PCV_name = "Success"
+PCV_name = "Success1"
 config = '''
 {
       "bd_change": {
