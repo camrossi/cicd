@@ -490,28 +490,32 @@ class NAE:
         early_epoch_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['base_epoch_id'])
         # print(str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id']))
         analysis_status = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['analysis_status'])
-        if(analysis_status == "SUBMITTTED"):
-            self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Submitted.")
-            return "SUBMITTTED"
-        if(analysis_status == "RUNNING"):
-            self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Running.")
+        print(analysis_status)
+        #if(analysis_status == "SUBMITTTED"):
+        #    self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Submitted.")
+        #    return "SUBMITTTED"
+        #if(analysis_status == "RUNNING"):
+        #    self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Running.")
+        #    return "RUNNING"
+        if analysis_status == "COMPLETED":
+            later_epoch_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['pre_change_epoch_uuid'])
+            analysis_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id'])
+            no_response = False
+            url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/event-severity'
+            response = requests.get(url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
+            self.logger.info("<======== SMART EVENT COUNT ========>")
+            if(verbose_flag):
+                print("FLAG!")
+                table_url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/aggregate-table'
+                print(table_url)
+                table_response = requests.get(table_url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
+                parse_table = parseJSON.Parser(response)
+                return parse_table.ParsePreChangeResults(parse_table.obj,pre_change_analysis_name,verbose_flag,table_response,early_epoch_id,later_epoch_id)
+            parse = parseJSON.Parser(response)
+            return parse.ParsePreChangeResults(parse.obj,pre_change_analysis_name,verbose_flag,no_response,early_epoch_id,later_epoch_id)
+        else:
+            self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed")
             return "RUNNING"
-        later_epoch_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['pre_change_epoch_uuid'])
-        analysis_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id'])
-        no_response = False
-        url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/event-severity'
-        response = requests.get(url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
-        self.logger.info("<======== SMART EVENT COUNT ========>")
-        if(verbose_flag):
-            print("FLAG!")
-            table_url = 'https://'+self.ip_addr+'/nae/api/v1/epoch-delta-services/assured-networks/'+fabric_id+'/job/'+analysis_id+'/health/view/aggregate-table'
-            print(table_url)
-            table_response = requests.get(table_url, headers=self.http_headers, cookies=self.session_cookie, verify=False)
-            parse_table = parseJSON.Parser(response)
-            return parse_table.ParsePreChangeResults(parse_table.obj,pre_change_analysis_name,verbose_flag,table_response,early_epoch_id,later_epoch_id)
-        parse = parseJSON.Parser(response)
-        return parse.ParsePreChangeResults(parse.obj,pre_change_analysis_name,verbose_flag,no_response,early_epoch_id,later_epoch_id)
-        
 
     def getTcamStats(self,ag_name):
         fabric_id = str(self.getAG(ag_name)['uuid'])
