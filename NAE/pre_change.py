@@ -1,4 +1,3 @@
-
 import cnae
 import logging
 import time
