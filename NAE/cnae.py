@@ -490,7 +490,6 @@ class NAE:
         early_epoch_id = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['base_epoch_id'])
         # print(str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['epoch_delta_job_id']))
         analysis_status = str(self.getPreChangeAnalysis(ag_name,pre_change_analysis_name)['analysis_status'])
-        print(analysis_status)
         #if(analysis_status == "SUBMITTTED"):
         #    self.logger.info("Pre-change analysis " + pre_change_analysis_name + " not completed. Status: Submitted.")
         #    return "SUBMITTTED"
