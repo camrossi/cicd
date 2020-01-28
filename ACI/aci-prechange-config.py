@@ -35,7 +35,7 @@ fvRsBDToNdP = cobra.model.fv.RsBDToNdP(fvBD, annotation=u'', tnNdIfPolName=u'')
 
 
 # commit the generated code to APIC
-print(toXMLStr(topMo))
+pprint(toXMLStr(topMo))
 c = cobra.mit.request.ConfigRequest()
 c.addMo(topMo)
 md.commit(c)
