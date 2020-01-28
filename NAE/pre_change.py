@@ -33,7 +33,6 @@ nae = cnae.NAE (args.nae_ip)
 #Log in to NAE with user and password
 nae.login(args.user, args.nae_password,args.domain)
 
-PCV_name = "Fail"
 config = '''
 {
       "bd_change": {
@@ -55,7 +54,8 @@ config = '''
     {
       "network_subnet_change": {
         "action": "ADD",
-        "dn": "uni/tn-Camillo/BD-BD2/subnet-1.0.0.1/8",
+        #"dn": "uni/tn-Camillo/BD-BD2/subnet-1.0.0.1/8",
+        "dn": "uni/tn-Camillo/BD-BD2/subnet-2.0.0.1/8",
         "scope": "private",
         "make_this_primary_ip_address": "no",
         "treat_as_virtual_ip_address": "no",
@@ -63,6 +63,8 @@ config = '''
       }
     }
 '''
+PCV_name = "Pass"
+
 nae.createPreChange("FAB2",PCV_name, config)
 
 analysis_result = nae.getPreChangeResult("FAB2",PCV_name,False)
