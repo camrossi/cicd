@@ -54,7 +54,6 @@ config = '''
     {
       "network_subnet_change": {
         "action": "ADD",
-        #"dn": "uni/tn-Camillo/BD-BD2/subnet-1.0.0.1/8",
         "dn": "uni/tn-Camillo/BD-BD2/subnet-2.0.0.1/8",
         "scope": "private",
         "make_this_primary_ip_address": "no",
