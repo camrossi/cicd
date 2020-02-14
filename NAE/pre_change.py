@@ -63,7 +63,7 @@ config = '''
 '''
 PCV_name = "Fail"
 
-nae.createPreChange("FAB2",PCV_name, config)
+nae.createPreChange("FAB2",PCV_name,"PVC Test",False, config,None)
 
 analysis_result = nae.getPreChangeResult("FAB2",PCV_name,False)
 
