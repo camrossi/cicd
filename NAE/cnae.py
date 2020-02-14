@@ -440,7 +440,7 @@ class NAE:
         config = []
         f = None
         fabric_id = str(self.getAG(ag_name)['uuid'])
-        base_epoch_id = self.getPreChangeAnalyses(ag_name,False)[-1]["base_epoch_id"]
+        base_epoch_id = self.getEpochs(ag_name,False)[-1]["base_epoch_id"]
         if(manual_flag):
             config = changes
         if(file_flag):
