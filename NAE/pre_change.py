@@ -61,7 +61,7 @@ config = '''
       }
     }]
 '''
-PCV_name = "Fail"
+PCV_name = "Fail2"
 
 nae.createPreChange("FAB2",PCV_name,"PVC Test",False, config,None)
 

@@ -470,7 +470,7 @@ class NAE:
         req = requests.post(url, data=m,  headers=h, cookies=self.session_cookie, verify=False) 
         if req.status_code == 200:
             self.logger.info('Pre-Change analysis "' + name + '" created.')
-            print(json.dumps(m))
+            print(m)
         else:
             self.logger.info("Error %s", req.content)     
             print(m)                   
