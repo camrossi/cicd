@@ -33,7 +33,7 @@ nae = cnae.NAE (args.nae_ip)
 nae.login(args.user, args.nae_password,args.domain)
 
 config = '''
-{
+[{
       "bd_change": {
         "action": "ADD",
         "dn": "uni/tn-PreChange/BD-BD2",
@@ -59,7 +59,7 @@ config = '''
         "treat_as_virtual_ip_address": "no",
         "subnet_control": "nd"
       }
-    }
+    }]
 '''
 PCV_name = "Fail"
 
