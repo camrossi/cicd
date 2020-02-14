@@ -88,6 +88,7 @@ def TableOutput(x,table_response,early_epoch_id,later_epoch_id):
 
 
 def createTable(severity,table_response,early_epoch_id,later_epoch_id):
+    rows = []
     if(table_response):
         t = PrettyTable(['Epoch','Event Name','Severity','Event Category','Description'])
         for item in table_response.json()['value']['data']:
