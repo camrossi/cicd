@@ -53,7 +53,7 @@ config = '''
     {
       "network_subnet_change": {
         "action": "ADD",
-        "dn": "uni/tn-PreChange/BD-BD2/subnet-1.0.0.1/8",
+        "dn": "uni/tn-PreChange/BD-BD2/subnet-10.0.0.1/8",
         "scope": "private",
         "make_this_primary_ip_address": "no",
         "treat_as_virtual_ip_address": "no",
