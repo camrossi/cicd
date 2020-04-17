@@ -148,7 +148,6 @@
         - App_Con
         - DB_Con
 
-
     - name: ensure subject exists for web contract
       aci_contract_subject: 
         <<: *aci_login
