@@ -32,7 +32,7 @@
           <<: *aci_login
           tenant: '{{ tenantName }}'
           name: '{{ vrfName }}'
-          state: present
+          state: '{{ state }}'
 
     - name: ensure bridge domain 1 exists
       aci_bd:
@@ -40,7 +40,7 @@
         name: BD1
         vrf: '{{ vrfName }}'
         tenant: '{{ tenantName }}'
-        state: present
+        state: '{{ state }}'
 
     - name: add subnet to BD
       aci_bd_subnet:
@@ -50,7 +50,7 @@
         subnet_name: BD1
         gateway: 10.10.10.1
         mask: 24
-        state: present
+        state: '{{ state }}'
 
     - name: ensure bridge domain 2 exists
       aci_bd:
@@ -58,7 +58,7 @@
         name: BD2
         vrf: '{{ vrfName }}'
         tenant: '{{ tenantName }}'
-        state: present
+        state: '{{ state }}'
 
     - name: add subnet to BD
       aci_bd_subnet:
@@ -68,14 +68,14 @@
         subnet_name: BD2
         gateway: 20.20.20.1
         mask: 24
-        state: present
+        state: '{{ state }}'
 
     - name: ensure web filter exists
       aci_filter:
         <<: *aci_login
         name: Web_Filter
         tenant: '{{ tenantName }}'
-        state: present
+        state: '{{ state }}'
 
     - name: entry for web filter
       aci_filter_entry:
@@ -86,7 +86,7 @@
         tenant: '{{ tenantName }}'
         filter: Web_Filter
         dst_port: 80
-        state: present
+        state: '{{ state }}'
 
 
     - name: ensure app filter exists
@@ -94,7 +94,7 @@
         <<: *aci_login
         name: App_Filter 
         tenant: '{{ tenantName }}'
-        state: present 
+        state: '{{ state }}' 
 
     - name: entry for app filter
       aci_filter_entry:
@@ -105,14 +105,14 @@
         tenant: '{{ tenantName }}'
         filter: App_Filter
         dst_port: 1433
-        state: present 
+        state: '{{ state }}' 
 
     - name: ensure db filter exists
       aci_filter: 
         <<: *aci_login
         name: DB_Filter 
         tenant: '{{ tenantName }}' 
-        state: present 
+        state: '{{ state }}' 
 
     - name: entry for db filter
       aci_filter_entry: 
@@ -123,7 +123,7 @@
         tenant: '{{ tenantName }}'
         filter: DB_Filter
         dst_port: 1521
-        state: present 
+        state: '{{ state }}' 
 
     - name: ensure contracts exist
       aci_contract:       
@@ -188,7 +188,7 @@
         <<: *aci_login
         name: 3Tier_App 
         tenant: '{{ tenantName }}' 
-        state: present 
+        state: '{{ state }}' 
 
     - name: ensure web epg exists
       aci_epg:
@@ -197,7 +197,7 @@
         bd: BD1
         ap: 3Tier_App
         tenant: '{{ tenantName }}'
-        state: present
+        state: '{{ state }}'
     
     - name: Map web epg to VMM Domain
       aci_epg_to_domain:
@@ -208,7 +208,7 @@
         domain_type: vmm
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
-        state: present
+        state: '{{ state }}'
 
 
     - name: Add contracts to  web epg
@@ -219,7 +219,7 @@
         epg: Web_EPG
         contract: Web_Con
         contract_type: consumer
-        state: present
+        state: '{{ state }}'
 
     - name: Add contracts to  web epg
       aci_epg_to_contract:
@@ -229,7 +229,7 @@
         epg: Web_EPG
         contract: App_Con
         contract_type: provider
-        state: present
+        state: '{{ state }}'
 
 
     - name: ensure app epg exists
@@ -239,7 +239,7 @@
         bd: BD1
         ap: 3Tier_App
         tenant: '{{ tenantName }}'
-        state: present
+        state: '{{ state }}'
 
     - name: Map app epg to VMM Domain
       aci_epg_to_domain:
@@ -250,7 +250,7 @@
         domain_type: vmm
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
-        state: present        
+        state: '{{ state }}'        
 
     - name: Add contracts to  app epg
       aci_epg_to_contract:
@@ -260,7 +260,7 @@
         epg: App_EPG
         contract: App_Con
         contract_type: consumer
-        state: present
+        state: '{{ state }}'
 
     - name: Add contracts to  app epg
       aci_epg_to_contract:
@@ -270,7 +270,7 @@
         epg: App_EPG
         contract: DB_Con
         contract_type: provider
-        state: present
+        state: '{{ state }}'
         
 
     - name: ensure db epg exists
@@ -280,7 +280,7 @@
         bd: BD1
         ap: 3Tier_App
         tenant: '{{ tenantName }}'
-        state: present
+        state: '{{ state }}'
 
     - name: Map epg to VMM Domain
       aci_epg_to_domain:
@@ -291,7 +291,7 @@
         domain_type: vmm
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
-        state: present        
+        state: '{{ state }}'        
 
 
     - name: Add contracts to app epg
@@ -302,5 +302,5 @@
         epg: DB_EPG
         contract: DB_Con
         contract_type: consumer
-        state: present
+        state: '{{ state }}'
  
