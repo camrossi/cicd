@@ -17,9 +17,6 @@
     vmmDomain: 'ACI'
 
   tasks:
-
-    # PREP
-
     - name: ensure tenant exists
       aci_tenant:
           <<: *aci_login
