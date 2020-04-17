@@ -25,6 +25,7 @@
           <<: *aci_login
           name: '{{ tenantName }}'
           descr: 'CDCI'
+          filename: 'dump.json'
 
 
     - name: ensure context for tenant exists
@@ -33,6 +34,7 @@
           tenant: '{{ tenantName }}'
           name: '{{ vrfName }}'
           state: present
+          filename: 'dump.json'
 
     - name: ensure bridge domain 1 exists
       aci_bd:
@@ -41,6 +43,7 @@
         vrf: '{{ vrfName }}'
         tenant: '{{ tenantName }}'
         state: present
+        filename: 'dump.json'
 
     - name: add subnet to BD
       aci_bd_subnet:
@@ -51,6 +54,7 @@
         gateway: 10.10.10.1
         mask: 24
         state: present
+        filename: 'dump.json'
 
     - name: ensure bridge domain 2 exists
       aci_bd:
@@ -59,6 +63,7 @@
         vrf: '{{ vrfName }}'
         tenant: '{{ tenantName }}'
         state: present
+        filename: 'dump.json'
 
     - name: add subnet to BD
       aci_bd_subnet:
@@ -69,6 +74,7 @@
         gateway: 20.20.20.1
         mask: 24
         state: present
+        filename: 'dump.json'
 
     - name: ensure web filter exists
       aci_filter:
@@ -76,6 +82,7 @@
         name: Web_Filter
         tenant: '{{ tenantName }}'
         state: present
+        filename: 'dump.json'
 
     - name: entry for web filter
       aci_filter_entry:
@@ -87,6 +94,7 @@
         filter: Web_Filter
         dst_port: 80
         state: present
+        filename: 'dump.json'
 
 
     - name: ensure app filter exists
@@ -95,6 +103,7 @@
         name: App_Filter 
         tenant: '{{ tenantName }}'
         state: present 
+        filename: 'dump.json'
 
     - name: entry for app filter
       aci_filter_entry:
@@ -106,6 +115,7 @@
         filter: App_Filter
         dst_port: 1433
         state: present 
+        filename: 'dump.json'
 
     - name: ensure db filter exists
       aci_filter: 
@@ -113,6 +123,7 @@
         name: DB_Filter 
         tenant: '{{ tenantName }}' 
         state: present 
+        filename: 'dump.json'
 
     - name: entry for db filter
       aci_filter_entry: 
@@ -124,6 +135,7 @@
         filter: DB_Filter
         dst_port: 1521
         state: present 
+        filename: 'dump.json'
 
     - name: ensure contracts exist
       aci_contract:       
@@ -189,6 +201,7 @@
         name: 3Tier_App 
         tenant: '{{ tenantName }}' 
         state: present 
+        filename: 'dump.json'
 
     - name: ensure web epg exists
       aci_epg:
@@ -198,6 +211,7 @@
         ap: 3Tier_App
         tenant: '{{ tenantName }}'
         state: present
+        filename: 'dump.json'
     
     - name: Map web epg to VMM Domain
       aci_epg_to_domain:
@@ -209,6 +223,7 @@
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
         state: present
+        filename: 'dump.json'
 
 
     - name: Add contracts to  web epg
@@ -220,6 +235,7 @@
         contract: Web_Con
         contract_type: consumer
         state: present
+        filename: 'dump.json'
 
     - name: Add contracts to  web epg
       aci_epg_to_contract:
@@ -230,6 +246,7 @@
         contract: App_Con
         contract_type: provider
         state: present
+        filename: 'dump.json'
 
 
     - name: ensure app epg exists
@@ -240,6 +257,7 @@
         ap: 3Tier_App
         tenant: '{{ tenantName }}'
         state: present
+        filename: 'dump.json'
 
     - name: Map app epg to VMM Domain
       aci_epg_to_domain:
@@ -251,6 +269,7 @@
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
         state: present        
+        filename: 'dump.json'
 
     - name: Add contracts to  app epg
       aci_epg_to_contract:
@@ -261,6 +280,7 @@
         contract: App_Con
         contract_type: consumer
         state: present
+        filename: 'dump.json'
 
     - name: Add contracts to  app epg
       aci_epg_to_contract:
@@ -271,6 +291,7 @@
         contract: DB_Con
         contract_type: provider
         state: present
+        filename: 'dump.json'
         
 
     - name: ensure db epg exists
@@ -281,6 +302,7 @@
         ap: 3Tier_App
         tenant: '{{ tenantName }}'
         state: present
+        filename: 'dump.json'
 
     - name: Map epg to VMM Domain
       aci_epg_to_domain:
@@ -292,6 +314,7 @@
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
         state: present        
+        filename: 'dump.json'
 
 
     - name: Add contracts to app epg
@@ -303,4 +326,5 @@
         contract: DB_Con
         contract_type: consumer
         state: present
+        filename: 'dump.json'
  
