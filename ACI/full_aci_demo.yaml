@@ -146,7 +146,7 @@
         - Web_Con
         - App_Con
         - DB_Con
-        filename: 'dump.json'
+      filename: 'dump.json'
 
 
     - name: ensure subject exists for web contract
