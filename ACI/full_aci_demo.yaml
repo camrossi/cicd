@@ -3,7 +3,7 @@
 - name: playbook for testing anp's and epg's
   hosts: all
   connection: local
-  gather_facts: no
+  gather_facts: yes
   vars:
     aci_login: &aci_login
       hostname: '{{ inventory_hostname }}'
