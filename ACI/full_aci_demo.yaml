@@ -19,19 +19,19 @@
   tasks:
     - name: ensure tenant exists
       aci_tenant:
-          <<: *aci_login
-          name: '{{ tenantName }}'
-          descr: 'CDCI'
-          filename: 'dump.json'
-
+        <<: *aci_login
+        name: '{{ tenantName }}'
+        descr: 'CDCI'
+        state: present
+        filename: 'dump.json'
 
     - name: ensure context for tenant exists
       aci_vrf:
-          <<: *aci_login
-          tenant: '{{ tenantName }}'
-          name: '{{ vrfName }}'
-          state: present
-          filename: 'dump.json'
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        name: '{{ vrfName }}'
+        state: present
+        filename: 'dump.json'
 
     - name: ensure bridge domain 1 exists
       aci_bd:
