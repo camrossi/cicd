@@ -19,4 +19,5 @@
       file: dump.json
       name: New
       state: verify
+      delegate_to: localhost
 ...
