@@ -1,0 +1,35 @@
+---
+
+- name: playbook for testing anp's and epg's
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+    aci_login: &aci_login
+      hostname: '{{ inventory_hostname }}'
+      username: ansible
+      private_key: 'ansible.key'
+      use_proxy: 'no'
+      validate_certs: '{{ validate_certs }}'
+      port: '{{ port }}'
+    tenantName: 'CICD'
+    vrfName: 'PROD'
+    vmmDomain: 'ACI'
+
+  tasks:
+    - name: ensure tenant exists
+      aci_tenant:
+          <<: *aci_login
+          name: '{{ tenantName }}'
+          descr: 'CDCI'
+          filename: 'dump.json'
+
+
+    - name: ensure context for tenant exists
+      aci_vrf:
+          <<: *aci_login
+          tenant: '{{ tenantName }}'
+          name: '{{ vrfName }}'
+          state: present
+          filename: 'dump.json'
+
