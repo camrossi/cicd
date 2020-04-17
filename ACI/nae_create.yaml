@@ -20,3 +20,11 @@
          file: dump.json
          name: New
          state: verify
+
+    - name: Get a pre-change analysis result
+      nae_prechange:
+         <<: *nae_login
+         ag_name: FAB2
+         name: New
+         state: query
+
