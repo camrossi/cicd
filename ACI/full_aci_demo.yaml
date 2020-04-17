@@ -142,11 +142,11 @@
         <<: *aci_login
         name: '{{ item }}'
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
       with_items:
         - Web_Con
         - App_Con
         - DB_Con
-      filename: 'dump.json'
 
 
     - name: ensure subject exists for web contract
