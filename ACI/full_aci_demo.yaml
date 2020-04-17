@@ -1,0 +1,306 @@
+---
+
+- name: playbook for testing anp's and epg's
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+    aci_login: &aci_login
+      hostname: '{{ inventory_hostname }}'
+      username: ansible
+      private_key: 'ansible.key'
+      use_proxy: 'no'
+      validate_certs: '{{ validate_certs }}'
+      port: '{{ port }}'
+    tenantName: 'CICD'
+    vrfName: 'PROD'
+    vmmDomain: 'ACI'
+
+  tasks:
+
+    # PREP
+
+    - name: ensure tenant exists
+      aci_tenant:
+          <<: *aci_login
+          name: '{{ tenantName }}'
+          descr: 'CDCI'
+
+
+    - name: ensure context for tenant exists
+      aci_vrf:
+          <<: *aci_login
+          tenant: '{{ tenantName }}'
+          name: '{{ vrfName }}'
+          state: present
+
+    - name: ensure bridge domain 1 exists
+      aci_bd:
+        <<: *aci_login
+        name: BD1
+        vrf: '{{ vrfName }}'
+        tenant: '{{ tenantName }}'
+        state: present
+
+    - name: add subnet to BD
+      aci_bd_subnet:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        bd: BD1
+        subnet_name: BD1
+        gateway: 10.10.10.1
+        mask: 24
+        state: present
+
+    - name: ensure bridge domain 2 exists
+      aci_bd:
+        <<: *aci_login
+        name: BD2
+        vrf: '{{ vrfName }}'
+        tenant: '{{ tenantName }}'
+        state: present
+
+    - name: add subnet to BD
+      aci_bd_subnet:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        bd: BD2
+        subnet_name: BD2
+        gateway: 20.20.20.1
+        mask: 24
+        state: present
+
+    - name: ensure web filter exists
+      aci_filter:
+        <<: *aci_login
+        name: Web_Filter
+        tenant: '{{ tenantName }}'
+        state: present
+
+    - name: entry for web filter
+      aci_filter_entry:
+        <<: *aci_login
+        name: web_filter
+        ether_type: ip
+        ip_protocol: tcp
+        tenant: '{{ tenantName }}'
+        filter: Web_Filter
+        dst_port: 80
+        state: present
+
+
+    - name: ensure app filter exists
+      aci_filter: 
+        <<: *aci_login
+        name: App_Filter 
+        tenant: '{{ tenantName }}'
+        state: present 
+
+    - name: entry for app filter
+      aci_filter_entry:
+        <<: *aci_login
+        name: app_filter 
+        ether_type: ip 
+        ip_protocol: tcp
+        tenant: '{{ tenantName }}'
+        filter: App_Filter
+        dst_port: 1433
+        state: present 
+
+    - name: ensure db filter exists
+      aci_filter: 
+        <<: *aci_login
+        name: DB_Filter 
+        tenant: '{{ tenantName }}' 
+        state: present 
+
+    - name: entry for db filter
+      aci_filter_entry: 
+        <<: *aci_login
+        name: db_filter 
+        ether_type: ip 
+        ip_protocol: tcp
+        tenant: '{{ tenantName }}'
+        filter: DB_Filter
+        dst_port: 1521
+        state: present 
+
+    - name: ensure contracts exist
+      aci_contract:       
+        <<: *aci_login
+        name: '{{ item }}'
+        tenant: '{{ tenantName }}' 
+      with_items:
+        - Web_Con
+        - App_Con
+        - DB_Con
+
+
+    - name: ensure subject exists for web contract
+      aci_contract_subject: 
+        <<: *aci_login
+        subject: web_subject
+        contract: Web_Con 
+        tenant: '{{ tenantName }}' 
+
+    - name: ensure subject exists for web contract
+      aci_contract_subject:
+        <<: *aci_login
+        subject: app_subject
+        contract: App_Con 
+        tenant: '{{ tenantName }}' 
+
+    - name: ensure subject exists for web contract
+      aci_contract_subject: 
+        <<: *aci_login
+        subject: db_subject 
+        contract: DB_Con  
+        tenant: '{{ tenantName }}' 
+    
+    - name: ensure filter exists for web contract
+      aci_contract_subject_to_filter: 
+        <<: *aci_login
+        subject: web_subject 
+        contract: Web_Con 
+        filter: Web_Filter 
+        tenant: '{{ tenantName }}' 
+
+    - name: ensure filter exists for web contract
+      aci_contract_subject_to_filter: 
+        <<: *aci_login
+        subject: app_subject 
+        contract: App_Con 
+        filter: App_Filter 
+        tenant: '{{ tenantName }}' 
+
+    - name: ensure filter exists for web contract
+      aci_contract_subject_to_filter: 
+        <<: *aci_login
+        subject: db_subject 
+        contract: DB_Con 
+        filter: DB_Filter 
+        tenant: '{{ tenantName }}' 
+
+    # TESTING APP NET PROFILES AND EPGS
+
+    - name: create app network profile
+      aci_ap: 
+        <<: *aci_login
+        name: 3Tier_App 
+        tenant: '{{ tenantName }}' 
+        state: present 
+
+    - name: ensure web epg exists
+      aci_epg:
+        <<: *aci_login
+        name: Web_EPG
+        bd: BD1
+        ap: 3Tier_App
+        tenant: '{{ tenantName }}'
+        state: present
+    
+    - name: Map web epg to VMM Domain
+      aci_epg_to_domain:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: Web_EPG
+        domain_type: vmm
+        vm_provider: vmware
+        domain: '{{ vmmDomain }}'
+        state: present
+
+
+    - name: Add contracts to  web epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: Web_EPG
+        contract: Web_Con
+        contract_type: consumer
+        state: present
+
+    - name: Add contracts to  web epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: Web_EPG
+        contract: App_Con
+        contract_type: provider
+        state: present
+
+
+    - name: ensure app epg exists
+      aci_epg:
+        <<: *aci_login
+        name: App_EPG
+        bd: BD1
+        ap: 3Tier_App
+        tenant: '{{ tenantName }}'
+        state: present
+
+    - name: Map app epg to VMM Domain
+      aci_epg_to_domain:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: App_EPG
+        domain_type: vmm
+        vm_provider: vmware
+        domain: '{{ vmmDomain }}'
+        state: present        
+
+    - name: Add contracts to  app epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: App_EPG
+        contract: App_Con
+        contract_type: consumer
+        state: present
+
+    - name: Add contracts to  app epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: App_EPG
+        contract: DB_Con
+        contract_type: provider
+        state: present
+        
+
+    - name: ensure db epg exists
+      aci_epg:
+        <<: *aci_login
+        name: DB_EPG
+        bd: BD1
+        ap: 3Tier_App
+        tenant: '{{ tenantName }}'
+        state: present
+
+    - name: Map epg to VMM Domain
+      aci_epg_to_domain:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: DB_EPG
+        domain_type: vmm
+        vm_provider: vmware
+        domain: '{{ vmmDomain }}'
+        state: present        
+
+
+    - name: Add contracts to app epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: 3Tier_App
+        epg: DB_EPG
+        contract: DB_Con
+        contract_type: consumer
+        state: present
+ 
