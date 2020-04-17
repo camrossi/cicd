@@ -146,6 +146,7 @@
         - Web_Con
         - App_Con
         - DB_Con
+        filename: 'dump.json'
 
 
     - name: ensure subject exists for web contract
@@ -154,6 +155,7 @@
         subject: web_subject
         contract: Web_Con 
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
 
     - name: ensure subject exists for web contract
       aci_contract_subject:
@@ -161,6 +163,7 @@
         subject: app_subject
         contract: App_Con 
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
 
     - name: ensure subject exists for web contract
       aci_contract_subject: 
@@ -168,6 +171,7 @@
         subject: db_subject 
         contract: DB_Con  
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
     
     - name: ensure filter exists for web contract
       aci_contract_subject_to_filter: 
@@ -176,6 +180,7 @@
         contract: Web_Con 
         filter: Web_Filter 
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
 
     - name: ensure filter exists for web contract
       aci_contract_subject_to_filter: 
@@ -184,6 +189,7 @@
         contract: App_Con 
         filter: App_Filter 
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
 
     - name: ensure filter exists for web contract
       aci_contract_subject_to_filter: 
@@ -192,6 +198,7 @@
         contract: DB_Con 
         filter: DB_Filter 
         tenant: '{{ tenantName }}' 
+        filename: 'dump.json'
 
     # TESTING APP NET PROFILES AND EPGS
 
