@@ -20,4 +20,4 @@
          ag_name: FAB2
          file: dump.json
          name: PCD
-         state: verify
+         state: query
