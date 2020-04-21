@@ -14,25 +14,10 @@
   
   tasks:
 
-    #    - name: Delete pre-change analysis if present
-    #      nae_prechange:
-    #         <<: *nae_login
-    #         ag_name: FAB2
-    #         name: New
-    #         state: absent
-    #
-    #    - name: Create a pre-change analysis and wait for result
-    #      nae_prechange:
-    #         <<: *nae_login
-    #         ag_name: FAB2
-    #         file: dump.json
-    #         name: New
-    #         state: verify
-
-    - name: Get a pre-change analysis result
+    - name: Create a pre-change analysis and wait for result
       nae_prechange:
          <<: *nae_login
          ag_name: FAB2
-         name: New
-         state: query
-
+         file: dump.json
+         name: PCD
+         state: verify
