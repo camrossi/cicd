@@ -13,7 +13,6 @@
     validate_certs: False
   
   tasks:
-
     - name: Delete a pre-exsiting PCV
       nae_prechange:
         <<: *nae_login
@@ -26,5 +25,5 @@
         ag_name: FAB2
         file: config.json
         name: PCV_Demo
-        state: verify
+        state: present
         verify: True
