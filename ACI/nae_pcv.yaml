@@ -27,4 +27,4 @@
         file: config.json
         name: PCV_Demo
         state: present
-        verify: true
+        verify: True
