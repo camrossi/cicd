@@ -26,5 +26,5 @@
         ag_name: FAB2
         file: config.json
         name: PCV_Demo
-        state: present
+        state: verify
         verify: True
