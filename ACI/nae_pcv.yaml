@@ -14,12 +14,12 @@
   
   tasks:
 
-    - name: Delete a pre-exsiting PCV
-      nae_prechange:
-        <<: *nae_login
-        ag_name: FAB2
-        name: PCV_Demo
-        state: absent
+    #    - name: Delete a pre-exsiting PCV
+    #      nae_prechange:
+    #        <<: *nae_login
+    #        ag_name: FAB2
+    #        name: PCV_Demo
+    #        state: absent
     - name: Create a pre-change analysis and wait for result
       nae_prechange:
         <<: *nae_login
