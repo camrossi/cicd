@@ -2,6 +2,8 @@
 
 - name: Verify ACI Config
   hosts: all
+  collections:
+  - cisco.nae
   connection: local
   gather_facts: no
   vars:
