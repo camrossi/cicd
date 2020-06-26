@@ -37,7 +37,7 @@ pygobject==3.26.1
 PyJWT==1.5.3
 pyOpenSSL==17.5.0
 pyserial==3.4
-python-apt==1.6.5+ubuntu0.2
+python-apt
 python-debian==0.1.32
 pyxdg==0.25
 PyYAML==3.12
@@ -55,3 +55,4 @@ ufw==0.36
 unattended-upgrades==0.1
 urllib3==1.22
 zope.interface==4.3.2
+jsonpath-ng
