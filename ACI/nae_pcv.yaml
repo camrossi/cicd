@@ -2,6 +2,8 @@
 
 - name: Verify ACI Config
   hosts: all
+  collections:
+  - cisco.nae
   connection: local
   gather_facts: no
   vars:
@@ -16,16 +18,15 @@
     - name: Create a pre-change analysis
       nae_prechange:
         <<: *nae_login
-        ag_name: FAB2
+        ag_name: PCV_DataSet
         file: config.json
         name: PCV_Demo
         state: present
-    - name: Query and Wait Verify 
+        verify: True
+    - name: Get PCV Result
       nae_prechange:
         <<: *nae_login
-        ag_name: FAB2
+        ag_name: PCV_DataSet
         name: PCV_Demo
-        state:  query
+        state: query
         verify: True
-
-
