@@ -203,7 +203,7 @@
     - name: create app network profile
       aci_ap: 
         <<: *aci_login
-        name: 3Tier_App 
+        name: Dev 
         tenant: '{{ tenantName }}' 
         state: present 
         output_path: 'config.json'
@@ -213,7 +213,7 @@
         <<: *aci_login
         name: Web_EPG
         bd: BD1
-        ap: 3Tier_App
+        ap: Dev
         tenant: '{{ tenantName }}'
         state: present
         output_path: 'config.json'
@@ -222,7 +222,7 @@
       aci_epg_to_domain:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: Web_EPG
         domain_type: vmm
         vm_provider: vmware
@@ -235,7 +235,7 @@
       aci_epg_to_contract:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: Web_EPG
         contract: Web_Con
         contract_type: consumer
@@ -246,20 +246,19 @@
       aci_epg_to_contract:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: Web_EPG
         contract: App_Con
         contract_type: provider
         state: present
         output_path: 'config.json'
 
-
     - name: ensure app epg exists
       aci_epg:
         <<: *aci_login
         name: App_EPG
         bd: BD1
-        ap: 3Tier_App
+        ap: Dev
         tenant: '{{ tenantName }}'
         state: present
         output_path: 'config.json'
@@ -268,7 +267,7 @@
       aci_epg_to_domain:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: App_EPG
         domain_type: vmm
         vm_provider: vmware
@@ -280,7 +279,7 @@
       aci_epg_to_contract:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: App_EPG
         contract: App_Con
         contract_type: consumer
@@ -291,7 +290,7 @@
       aci_epg_to_contract:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: App_EPG
         contract: DB_Con
         contract_type: provider
@@ -304,7 +303,7 @@
         <<: *aci_login
         name: DB_EPG
         bd: BD1
-        ap: 3Tier_App
+        ap: Dev
         tenant: '{{ tenantName }}'
         state: present
         output_path: 'config.json'
@@ -313,7 +312,7 @@
       aci_epg_to_domain:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: DB_EPG
         domain_type: vmm
         vm_provider: vmware
@@ -325,10 +324,10 @@
       aci_epg_to_contract:
         <<: *aci_login
         tenant: '{{ tenantName }}'
-        ap: 3Tier_App
+        ap: Dev
         epg: DB_EPG
         contract: DB_Con
         contract_type: consumer
         state: present
         output_path: 'config.json'
- 
+
