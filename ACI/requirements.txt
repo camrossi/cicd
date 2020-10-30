@@ -68,3 +68,4 @@ urllib3
 xmljson
 zipp
 zope.interface
+filelock
