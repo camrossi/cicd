@@ -211,7 +211,7 @@
     - name: ensure web epg exists
       aci_epg:
         <<: *aci_login
-        name: Web_EPG
+        name: Web_EPG_CICD
         bd: BD1
         ap: Dev
         tenant: '{{ tenantName }}'
@@ -223,20 +223,19 @@
         <<: *aci_login
         tenant: '{{ tenantName }}'
         ap: Dev
-        epg: Web_EPG
+        epg: Web_EPG_CICD
         domain_type: vmm
         vm_provider: vmware
         domain: '{{ vmmDomain }}'
         state: present
         output_path: 'config.json'
 
-
     - name: Add contracts to  web epg
       aci_epg_to_contract:
         <<: *aci_login
         tenant: '{{ tenantName }}'
         ap: Dev
-        epg: Web_EPG
+        epg: Web_EPG_CICD
         contract: Web_Con
         contract_type: consumer
         state: present
@@ -247,7 +246,7 @@
         <<: *aci_login
         tenant: '{{ tenantName }}'
         ap: Dev
-        epg: Web_EPG
+        epg: Web_EPG_CICD
         contract: App_Con
         contract_type: provider
         state: present
@@ -297,7 +296,6 @@
         state: present
         output_path: 'config.json'
         
-
     - name: ensure db epg exists
       aci_epg:
         <<: *aci_login

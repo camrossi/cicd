@@ -9,7 +9,6 @@
   vars:
     nae_login: &nae_login
         host: 10.66.176.111
-        #        port: 8448
         username: admin
         password: C@ndidadmin1234  
     validate_certs: False
@@ -18,7 +17,7 @@
     - name: Create a pre-change analysis
       nae_prechange:
         <<: *nae_login
-        ag_name: "FAB2"
+        ag_name: "CICD"
         name: PCV_Demo
         state: present
         verify: True
@@ -26,7 +25,7 @@
     - name: Get PCV Result
       nae_prechange:
         <<: *nae_login
-        ag_name: "FAB2"
+        ag_name: "CICD"
         name: PCV_Demo
         state: query
         verify: True
