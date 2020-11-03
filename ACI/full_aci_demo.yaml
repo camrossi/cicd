@@ -50,8 +50,8 @@
         tenant: '{{ tenantName }}'
         bd: BD1
         subnet_name: BD1
-        gateway: 10.10.10.1
-        mask: 24
+        gateway: 10.10.20.1
+        mask: 16
         state: present
         output_path: 'config.json'
 
