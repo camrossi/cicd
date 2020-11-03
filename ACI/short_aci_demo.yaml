@@ -2,8 +2,10 @@
 
 - name: playbook for testing anp's and epg's
   hosts: all
+  collections:
+   - cisco.aci
   connection: local
-  gather_facts: no
+  gather_facts: yes
   vars:
     aci_login: &aci_login
       hostname: '{{ inventory_hostname }}'
@@ -19,17 +21,36 @@
   tasks:
     - name: ensure tenant exists
       aci_tenant:
-          <<: *aci_login
-          name: '{{ tenantName }}'
-          descr: 'CDCI'
-          filename: 'dump.json'
-
+        <<: *aci_login
+        name: '{{ tenantName }}'
+        descr: 'CDCI'
+        state: present
+        output_path: 'config.json'
 
     - name: ensure context for tenant exists
       aci_vrf:
-          <<: *aci_login
-          tenant: '{{ tenantName }}'
-          name: '{{ vrfName }}'
-          state: present
-          filename: 'dump.json'
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        name: '{{ vrfName }}'
+        state: present
+        output_path: 'config.json'
 
+    - name: ensure bridge domain 1 exists
+      aci_bd:
+        <<: *aci_login
+        name: BD1
+        vrf: '{{ vrfName }}'
+        tenant: '{{ tenantName }}'
+        state: present
+        output_path: 'config.json'
+
+    - name: add subnet to BD
+      aci_bd_subnet:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        bd: BD1
+        subnet_name: BD1
+        gateway: 10.10.20.1
+        mask: 24
+        state: present
+        output_path: 'config.json'

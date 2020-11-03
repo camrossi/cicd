@@ -240,7 +240,7 @@
         contract_type: consumer
         state: present
         output_path: 'config.json'
-
+    
     - name: Add contracts to  web epg
       aci_epg_to_contract:
         <<: *aci_login
@@ -282,6 +282,17 @@
         epg: App_EPG
         contract: App_Con
         contract_type: consumer
+        state: present
+        output_path: 'config.json'
+
+    - name: Add contracts to  app epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: Dev
+        epg: App_EPG
+        contract: Web_Con
+        contract_type: provider
         state: present
         output_path: 'config.json'
 
