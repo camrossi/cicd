@@ -14,18 +14,10 @@
     validate_certs: False
   
   tasks:
-    - name: Create a pre-change analysis
-      cisco.nae.nae_prechange:
-        <<: *nae_login
-        ag_name: "STLD_FAB1"
-        name: PCV_Demo
-        state: present
-        verify: True
-        file: config.json
     - name: Get PCV Result
       cisco.nae.nae_prechange:
         <<: *nae_login
         ag_name: "STLD_FAB1"
-        name: PCV_Demo
+        name: PCV_Demo_OK
         state: query
         verify: True
