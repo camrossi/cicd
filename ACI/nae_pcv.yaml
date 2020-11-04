@@ -18,7 +18,7 @@
       cisco.nae.nae_prechange:
         <<: *nae_login
         ag_name: "STLD_FAB1"
-        name: PCV_Demo_OK
+        name: PCV_Demo
         state: present
         verify: True
         file: config.json
@@ -26,6 +26,6 @@
       cisco.nae.nae_prechange:
         <<: *nae_login
         ag_name: "STLD_FAB1"
-        name: PCV_Demo_OK
+        name: PCV_Demo
         state: query
         verify: True
