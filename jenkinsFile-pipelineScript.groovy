@@ -13,7 +13,7 @@ pipeline {
      steps {
        dir('dev'){
          ansiColor('xterm'){
-           git branch: 'master', url: 'http://10.67.185.80/cisco/camrossi/cicd.git'
+           git branch: 'master', url: 'http://gitlab.cam.ciscolabs.com/camrossi/cicd.git'
          }
        }
      }
@@ -29,7 +29,7 @@ pipeline {
                      includes: 'config.json'
                      )])
                  ansiblePlaybook(
-                     playbook: './full_aci_demo.yaml',
+                     playbook: './short_aci_demo.yaml',
                      inventory: './inventory',
                      extras: '--check -vvv',
                      colorized: true)
@@ -60,7 +60,7 @@ pipeline {
        dir('dev/ACI'){
              ansiColor('xterm') {
                  ansiblePlaybook(
-                     playbook: './full_aci_demo.yaml',
+                     playbook: './short_aci_demo.yaml',
                      inventory: './inventory',
                      extras: '-vvv',
                      colorized: true) 

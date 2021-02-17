@@ -18,14 +18,15 @@
       cisco.nae.nae_prechange:
         <<: *nae_login
         ag_name: "Change Management"
-        name: PCV_Demo336
+        name: Jenkins
         state: present
         verify: false
-        file: tn-nae-prod.xml
- #   - name: Get PCV Result
- #     cisco.nae.nae_prechange:
- #       <<: *nae_login
- #       ag_name: "Change Management"
- #       name: PCV_Demo
- #       state: query
- #       verify: True
+        file: config.json
+
+    - name: Get PCV Result
+      cisco.nae.nae_prechange:
+        <<: *nae_login
+        ag_name: "Change Management"
+        name: Jenkins
+        state: query
+        verify: True

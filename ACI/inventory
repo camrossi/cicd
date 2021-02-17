@@ -1,8 +1,6 @@
-[fab1]
+[APIC]
 10.67.185.106
 
 [all:vars]
-user = 'admin'
-pass = '123Cisco123'
 validate_certs = 'no'
 port = '443'

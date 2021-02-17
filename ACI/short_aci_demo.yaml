@@ -16,7 +16,6 @@
       port: '{{ port }}'
     tenantName: 'nae-prod'
     vrfName: 'prod-vrf'
-    vmmDomain: 'ACI'
 
   tasks:
     - name: ensure tenant exists
