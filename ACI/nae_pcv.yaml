@@ -20,7 +20,7 @@
         ag_name: "Change Management"
         name: Jenkins
         state: present
-        verify: false
+        verify: true
         file: config.json
 
     - name: Get PCV Result
