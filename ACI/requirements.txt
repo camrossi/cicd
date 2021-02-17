@@ -1,4 +1,3 @@
-ansible
 asn1crypto
 attrs
 Automat

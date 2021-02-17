@@ -9,11 +9,13 @@ pipeline {
  agent any
  
  stages {
-   stage('Git code checkout'){
+   stage('Git code checkout and dependencies install'){
      steps {
        dir('dev'){
          ansiColor('xterm'){
            git branch: 'master', url: 'http://gitlab.cam.ciscolabs.com/camrossi/cicd.git'
+           sh 'ansible-galaxy collection install -r galaxy_requirements.txt'
+           sh 'pip3 install -r requirements.txt'
          }
        }
      }
@@ -43,7 +45,6 @@ pipeline {
      steps {
          dir('dev/ACI'){
              ansiColor('xterm') {
-                 sh 'pip3 install -r requirements.txt'
                  ansiblePlaybook(
                      playbook: './nae_pcv.yaml',
                      inventory: './inventory',
