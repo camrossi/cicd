@@ -1,2 +1,1 @@
-# CICD
-Jenkins and Terraform code to deploy ACI and vSphere infra
+# CICD Pipeline for ACI and NAE

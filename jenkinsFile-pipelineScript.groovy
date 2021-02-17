@@ -5,16 +5,6 @@
 // you need to create a username/password credentials set that sshCommand will use
 // that's about it - enjoy!
 
-void slackTalk(msg) {
-    // if you want to use Slack, add an integration (webhook-type) to your channel
-    // you will receive values for T, B and S
-    T = "TQD55T6UF"
-    B = "BQ0K1GBGB"
-    S= "oVbsstox4mp30MKNgI28d6NR"
-    sh "curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"${msg}\"}' https://hooks.slack.com/services/$T/$B/$S"
-}
-
-
 pipeline {
  agent any
  
