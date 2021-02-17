@@ -1,2 +1,4 @@
-cisco.nae
-cisco.aci
+---
+collections:
+- name: cisco.nae
+- name: cisco.aci

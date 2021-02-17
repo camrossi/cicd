@@ -14,9 +14,11 @@ pipeline {
        dir('dev'){
          ansiColor('xterm'){
            git branch: 'master', url: 'http://gitlab.cam.ciscolabs.com/camrossi/cicd.git'
+         }
+       }
+       dir('dev/ACI'){
            sh 'ansible-galaxy collection install -r galaxy_requirements.txt'
            sh 'pip3 install -r requirements.txt'
-         }
        }
      }
    }
