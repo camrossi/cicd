@@ -14,7 +14,14 @@
     validate_certs: False
   
   tasks:
-
+    - name: Create a pre-change analysis
+      cisco.nae.nae_prechange:
+        <<: *nae_login
+        ag_name: "FAB1"
+        name: Jenkins
+        state: present
+        verify: true
+        file: config.json
 
     - name: Get PCV Result
       cisco.nae.nae_prechange:
@@ -24,4 +31,5 @@
         state: query
         verify: True
         ignore_sm:
+          # We ignore this info event or the pipeline will always fail. 
           - APP_EPG_NOT_DEPLOYED
