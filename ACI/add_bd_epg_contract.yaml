@@ -46,7 +46,7 @@
         tenant: '{{ tenantName }}'
         state: present
         output_path: 'config.json'
-        
+
     - name: ensure bridge domain 2 exists
       aci_bd:
         <<: *aci_login
@@ -63,7 +63,7 @@
         bd: BD2
         subnet_name: BD2
         gateway: 10.66.2.1
-        mask: 16
+        mask: 24
         state: present
         output_path: 'config.json'
 
