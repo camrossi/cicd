@@ -14,15 +14,24 @@
       use_proxy: 'no'
       validate_certs: '{{ validate_certs }}'
       port: '{{ port }}'
-    tenantName: 'scbs'
+    tenantName: 'scb'
     vrfName: 'scb'
     vmmDomain: 'ACI'
     app: 'scb'
   tasks:
+    
+    - name: Delete context for tenant exists
+      aci_vrf:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        name: '{{ vrfName }}'
+        state: absent
+        output_path: 'config.json'
+
     - name: Delete Tenant
       aci_tenant:
         <<: *aci_login
         name: '{{ tenantName }}'
         descr: 'CDCI'
-        state: present
+        state: absent
         output_path: 'config.json'
