@@ -14,7 +14,7 @@
       use_proxy: 'no'
       validate_certs: '{{ validate_certs }}'
       port: '{{ port }}'
-    tenantName: 'scb'
+    tenantName: 'scbs'
     vrfName: 'scb'
     vmmDomain: 'ACI'
     app: 'scb'
