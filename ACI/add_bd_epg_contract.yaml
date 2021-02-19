@@ -21,6 +21,14 @@
 
   tasks:
 
+    - name: ensure tenant exists
+      aci_tenant:
+        <<: *aci_login
+        name: '{{ tenantName }}'
+        descr: 'CDCI'
+        state: present
+        output_path: 'config.json'
+    
     - name: ensure bridge domain 2 exists
       aci_bd:
         <<: *aci_login
