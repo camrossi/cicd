@@ -37,6 +37,16 @@
         state: present 
         output_path: 'config.json'
 
+    - name: ensure web epg exists
+      aci_epg:
+        <<: *aci_login
+        name: Web_EPG
+        bd: BD1
+        ap: '{{ app }}'
+        tenant: '{{ tenantName }}'
+        state: present
+        output_path: 'config.json'
+        
     - name: ensure bridge domain 2 exists
       aci_bd:
         <<: *aci_login
