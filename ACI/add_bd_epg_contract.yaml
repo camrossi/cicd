@@ -28,7 +28,15 @@
         descr: 'CDCI'
         state: present
         output_path: 'config.json'
-    
+
+    - name: create app network profile
+      aci_ap: 
+        <<: *aci_login
+        name: '{{ app }}'
+        tenant: '{{ tenantName }}' 
+        state: present 
+        output_path: 'config.json'
+
     - name: ensure bridge domain 2 exists
       aci_bd:
         <<: *aci_login
