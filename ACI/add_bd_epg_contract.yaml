@@ -1,0 +1,150 @@
+---
+
+- name: playbook for testing anp's and epg's
+  hosts: all
+  collections:
+   - cisco.aci
+  connection: local
+  gather_facts: yes
+  vars:
+    aci_login: &aci_login
+      hostname: '{{ inventory_hostname }}'
+      username: ansible
+      private_key: 'ansible.key'
+      use_proxy: 'no'
+      validate_certs: '{{ validate_certs }}'
+      port: '{{ port }}'
+    tenantName: 'scb'
+    vrfName: 'scb'
+    vmmDomain: 'ACI'
+    app: 'scb'
+
+  tasks:
+
+    - name: ensure bridge domain 2 exists
+      aci_bd:
+        <<: *aci_login
+        name: BD2
+        vrf: '{{ vrfName }}'
+        tenant: '{{ tenantName }}'
+        state: present
+        output_path: 'config.json'
+
+    - name: add subnet to BD2
+      aci_bd_subnet:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        bd: BD2
+        subnet_name: BD2
+        gateway: 10.66.2.1
+        mask: 16
+        state: present
+        output_path: 'config.json'
+
+    - name: ensure bridge domain 3 exists
+      aci_bd:
+        <<: *aci_login
+        name: BD3
+        vrf: '{{ vrfName }}'
+        tenant: '{{ tenantName }}'
+        state: present
+        output_path: 'config.json'
+
+    - name: add subnet to BD3
+      aci_bd_subnet:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        bd: BD3
+        subnet_name: BD3
+        gateway: 10.66.3.1
+        mask: 24
+        state: present
+        output_path: 'config.json'
+
+    - name: ensure web filter exists
+      aci_filter:
+        <<: *aci_login
+        name: Web_Filter
+        tenant: '{{ tenantName }}'
+        state: present
+        output_path: 'config.json'
+
+    - name: entry for web filter
+      aci_filter_entry:
+        <<: *aci_login
+        name: web_filter
+        ether_type: ip
+        ip_protocol: tcp
+        tenant: '{{ tenantName }}'
+        filter: Web_Filter
+        dst_port: 80
+        state: present
+        output_path: 'config.json'
+
+    - name: ensure web contracts exist
+      aci_contract:       
+        <<: *aci_login
+        name: Web_Con
+        tenant: '{{ tenantName }}' 
+        output_path: 'config.json'
+
+    - name: ensure subject exists for web contract
+      aci_contract_subject: 
+        <<: *aci_login
+        subject: web_subject
+        contract: Web_Con 
+        tenant: '{{ tenantName }}' 
+        output_path: 'config.json'
+
+    - name: Map Subject to Filter
+      aci_contract_subject_to_filter: 
+        <<: *aci_login
+        subject: web_subject 
+        contract: Web_Con 
+        filter: Web_Filter 
+        tenant: '{{ tenantName }}' 
+        output_path: 'config.json'
+
+    - name: Add contracts to  web epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: '{{ app }}'
+        epg: Web_EPG
+        contract: Web_Con
+        contract_type: consumer
+        state: present
+        output_path: 'config.json'
+
+    - name: ensure app epg exists
+      aci_epg:
+        <<: *aci_login
+        name: App_EPG
+        bd: BD2
+        ap: '{{ app }}'
+        tenant: '{{ tenantName }}'
+        state: present
+        output_path: 'config.json'
+
+    - name: Map app epg to VMM Domain
+      aci_epg_to_domain:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: '{{ app }}'
+        epg: App_EPG
+        domain_type: vmm
+        vm_provider: vmware
+        domain: '{{ vmmDomain }}'
+        state: present        
+        output_path: 'config.json'
+
+    - name: Add contracts to  App epg
+      aci_epg_to_contract:
+        <<: *aci_login
+        tenant: '{{ tenantName }}'
+        ap: '{{ app }}'
+        epg: App_EPG
+        contract: Web_Con
+        contract_type: provider
+        state: present
+        output_path: 'config.json'

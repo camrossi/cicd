@@ -1,0 +1,28 @@
+---
+
+- name: playbook for testing anp's and epg's
+  hosts: all
+  collections:
+   - cisco.aci
+  connection: local
+  gather_facts: yes
+  vars:
+    aci_login: &aci_login
+      hostname: '{{ inventory_hostname }}'
+      username: ansible
+      private_key: 'ansible.key'
+      use_proxy: 'no'
+      validate_certs: '{{ validate_certs }}'
+      port: '{{ port }}'
+    tenantName: 'scb'
+    vrfName: 'scb'
+    vmmDomain: 'ACI'
+    app: 'scb'
+  tasks:
+    - name: Delete Tenant
+      aci_tenant:
+        <<: *aci_login
+        name: '{{ tenantName }}'
+        descr: 'CDCI'
+        state: absent
+        output_path: 'config.json'

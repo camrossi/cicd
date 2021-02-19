@@ -24,7 +24,7 @@ pipeline {
    }
  
 
-    stage('Generate  ACI Config') {
+    stage('Generate ACI Config') {
      steps {
          dir('dev/ACI'){
              ansiColor('xterm') {
