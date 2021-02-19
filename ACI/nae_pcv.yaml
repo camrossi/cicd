@@ -17,7 +17,7 @@
     - name: Create a pre-change analysis
       cisco.nae.nae_prechange:
         <<: *nae_login
-        ag_name: "Change Management"
+        ag_name: "FAB1"
         name: Jenkins
         state: present
         verify: true
@@ -26,7 +26,7 @@
     - name: Get PCV Result
       cisco.nae.nae_prechange:
         <<: *nae_login
-        ag_name: "Change Management"
+        ag_name: "FAB1"
         name: Jenkins
         state: query
         verify: True
